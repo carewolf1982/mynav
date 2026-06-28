@@ -2,7 +2,6 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 移动端自适应 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的私人导航</title>
     <style>
@@ -10,58 +9,103 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft Yahei", sans-serif;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
         }
         body {
-            background-color: #f5f7fa;
-            padding: 40px 20px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 20px;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
         h1 {
             text-align: center;
-            color: #222;
-            margin-bottom: 40px;
-            font-size: 28px;
+            color: #fff;
+            margin-bottom: 50px;
+            font-size: 42px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.2);
         }
         .nav-group {
-            margin-bottom: 32px;
+            margin-bottom: 40px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
         }
         .group-title {
-            font-size: 20px;
+            font-size: 18px;
             color: #333;
-            margin-bottom: 16px;
-            padding-left: 8px;
-            border-left: 4px solid #2563eb;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .group-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 2px;
         }
         .link-box {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 16px;
         }
         .link-item a {
-            display: block;
-            background: #fff;
-            padding: 16px 10px;
-            text-align: center;
-            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 20px 12px;
+            border-radius: 14px;
             text-decoration: none;
-            color: #1f2937;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: all 0.2s;
+            color: #444;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+        .link-item a .icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            transition: transform 0.3s;
         }
         .link-item a:hover {
-            background: #2563eb;
-            color: white;
-            transform: translateY(-3px);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            border-color: rgba(255,255,255,0.2);
         }
-        /* 深色模式跟随系统 */
+        .link-item a:hover .icon {
+            transform: scale(1.15);
+        }
+        @media (max-width: 600px) {
+            body { padding: 30px 15px; }
+            h1 { font-size: 28px; margin-bottom: 30px; }
+            .nav-group { padding: 20px; border-radius: 16px; }
+            .link-box { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+            .link-item a { padding: 16px 8px; font-size: 12px; }
+            .link-item a .icon { width: 30px; height: 30px; font-size: 24px; }
+        }
         @media (prefers-color-scheme: dark) {
-            body {background: #111827;}
-            h1,.group-title {color: #e5e7eb;}
-            .link-item a {background: #1f2937; color: #e5e7eb;}
+            body {background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);}
+            .nav-group {background: rgba(30,30,50,0.9);}
+            .group-title {color: #e5e7eb; border-bottom-color: #333;}
+            .link-item a {background: #252540; color: #ccc;}
         }
     </style>
 </head>
@@ -73,10 +117,11 @@
     <div class="nav-group">
         <h2 class="group-title">常用工具</h2>
         <div class="link-box">
-            <div class="link-item"><a href="https://www.baidu.com" target="_blank">百度</a></div>
-            <div class="link-item"><a href="https://www.bing.com" target="_blank">必应</a></div>
-            <div class="link-item"><a href="https://github.com" target="_blank">Github</a></div>
-            <div class="link-item"><a href="https://gitee.com" target="_blank">Gitee</a></div>
+            <div class="link-item"><a href="https://www.baidu.com" target="_blank"><span class="icon">🔍</span>百度</a></div>
+            <div class="link-item"><a href="https://www.bing.com" target="_blank"><span class="icon">🌐</span>必应</a></div>
+            <div class="link-item"><a href="https://github.com" target="_blank"><span class="icon">🐙</span>Github</a></div>
+            <div class="link-item"><a href="https://gitee.com" target="_blank"><span class="icon">🐱</span>Gitee</a></div>
+            <div class="link-item"><a href="https://mail.163.com" target="_blank"><span class="icon">📧</span>网易邮箱</a></div>
         </div>
     </div>
 
@@ -84,9 +129,9 @@
     <div class="nav-group">
         <h2 class="group-title">影音娱乐</h2>
         <div class="link-box">
-            <div class="link-item"><a href="https://www.bilibili.com" target="_blank">B站</a></div>
-            <div class="link-item"><a href="https://v.qq.com" target="_blank">腾讯视频</a></div>
-            <div class="link-item"><a href="https://music.163.com" target="_blank">网易云音乐</a></div>
+            <div class="link-item"><a href="https://www.bilibili.com" target="_blank"><span class="icon">📺</span>B站</a></div>
+            <div class="link-item"><a href="https://v.qq.com" target="_blank"><span class="icon">🎬</span>腾讯视频</a></div>
+            <div class="link-item"><a href="https://music.163.com" target="_blank"><span class="icon">🎵</span>网易云音乐</a></div>
         </div>
     </div>
 
@@ -94,8 +139,11 @@
     <div class="nav-group">
         <h2 class="group-title">工作站点</h2>
         <div class="link-box">
-            <div class="link-item"><a href="这里替换成你的网址" target="_blank">自定义1</a></div>
-            <div class="link-item"><a href="这里替换成你的网址" target="_blank">自定义2</a></div>
+            <div class="link-item"><a href="http://192.168.31.100:9091" target="_blank"><span class="icon">📡</span>Transmission</a></div>
+            <div class="link-item"><a href="https://kp.m-team.cc/" target="_blank"><span class="icon">🎯</span>M-Team</a></div>
+            <div class="link-item"><a href="https://lemonhd.net/index.php" target="_blank"><span class="icon">🍋</span>LemonHD</a></div>
+            <div class="link-item"><a href="这里替换成你的网址" target="_blank"><span class="icon">⭐</span>自定义1</a></div>
+            <div class="link-item"><a href="这里替换成你的网址" target="_blank"><span class="icon">⭐</span>自定义2</a></div>
         </div>
     </div>
 </div>
