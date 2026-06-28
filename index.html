@@ -101,17 +101,194 @@
             .link-item a { padding: 16px 8px; font-size: 12px; }
             .link-item a .icon { width: 30px; height: 30px; font-size: 24px; }
         }
+        /* 搜索栏样式 */
+        .search-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 10;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8f9fa;
+            border-radius: 50px;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .search-box:focus-within {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        .engine-selector {
+            position: relative;
+        }
+        .engine-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .engine-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .engine-btn::after {
+            content: '▼';
+            font-size: 10px;
+            margin-left: 4px;
+        }
+        .engine-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            min-width: 160px;
+        }
+        .engine-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .engine-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            color: #333;
+            font-size: 14px;
+        }
+        .engine-option:hover {
+            background: #f8f9fa;
+        }
+        .engine-option.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .engine-icon {
+            font-size: 18px;
+        }
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            background: transparent;
+            color: #333;
+        }
+        .search-input::placeholder {
+            color: #999;
+        }
+        .search-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .search-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .search-container { padding: 20px; }
+            .search-box {
+                flex-wrap: wrap;
+                padding: 10px 15px;
+            }
+            .engine-selector { width: 100%; }
+            .engine-btn { width: 100%; justify-content: center; }
+            .search-input { width: 100%; order: 1; margin-top: 10px; }
+            .search-btn { order: 2; width: 100%; border-radius: 25px; height: 42px; margin-top: 10px; }
+        }
+
         @media (prefers-color-scheme: dark) {
             body {background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);}
             .nav-group {background: rgba(30,30,50,0.9);}
             .group-title {color: #e5e7eb; border-bottom-color: #333;}
             .link-item a {background: #252540; color: #ccc;}
+            .search-container {background: rgba(30,30,50,0.9);}
+            .search-box {background: #252540;}
+            .search-input {color: #e5e7eb;}
+            .search-input::placeholder {color: #888;}
+            .engine-dropdown {background: #252540;}
+            .engine-option {color: #e5e7eb;}
+            .engine-option:hover {background: #3a3a5a;}
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>我的私人导航</h1>
+
+    <!-- 搜索栏 -->
+    <div class="search-container">
+        <div class="search-box">
+            <div class="engine-selector">
+                <button class="engine-btn" onclick="toggleDropdown()">
+                    <span class="engine-icon" id="currentEngineIcon">🔍</span>
+                    <span id="currentEngineName">百度</span>
+                </button>
+                <div class="engine-dropdown" id="engineDropdown">
+                    <div class="engine-option active" data-url="https://www.baidu.com/s?wd=" data-icon="🔍" onclick="selectEngine(this)">
+                        <span class="engine-icon">🔍</span>
+                        <span>百度</span>
+                    </div>
+                    <div class="engine-option" data-url="https://www.google.com/search?q=" data-icon="🌐" onclick="selectEngine(this)">
+                        <span class="engine-icon">🌐</span>
+                        <span>Google</span>
+                    </div>
+                    <div class="engine-option" data-url="https://www.bing.com/search?q=" data-icon="🔎" onclick="selectEngine(this)">
+                        <span class="engine-icon">🔎</span>
+                        <span>Bing</span>
+                    </div>
+                    <div class="engine-option" data-url="https://search.bilibili.com/all?keyword=" data-icon="📺" onclick="selectEngine(this)">
+                        <span class="engine-icon">📺</span>
+                        <span>哔哩哔哩</span>
+                    </div>
+                    <div class="engine-option" data-url="https://github.com/search?q=" data-icon="🐙" onclick="selectEngine(this)">
+                        <span class="engine-icon">🐙</span>
+                        <span>GitHub</span>
+                    </div>
+                </div>
+            </div>
+            <input type="text" class="search-input" id="searchInput" placeholder="输入搜索内容，按 Enter 键搜索..." onkeypress="handleKeyPress(event)">
+            <button class="search-btn" onclick="performSearch()">→</button>
+        </div>
+    </div>
 
     <!-- 第一组：常用工具 -->
     <div class="nav-group">
@@ -147,5 +324,60 @@
         </div>
     </div>
 </div>
+
+<script>
+    let currentEngineUrl = 'https://www.baidu.com/s?wd=';
+
+    // 切换下拉菜单
+    function toggleDropdown() {
+        const dropdown = document.getElementById('engineDropdown');
+        dropdown.classList.toggle('show');
+    }
+
+    // 选择搜索引擎
+    function selectEngine(element) {
+        const url = element.getAttribute('data-url');
+        const icon = element.getAttribute('data-icon');
+        const name = element.querySelector('span:last-child').textContent;
+
+        currentEngineUrl = url;
+        document.getElementById('currentEngineIcon').textContent = icon;
+        document.getElementById('currentEngineName').textContent = name;
+
+        // 更新活动状态
+        document.querySelectorAll('.engine-option').forEach(option => {
+            option.classList.remove('active');
+        });
+        element.classList.add('active');
+
+        // 关闭下拉菜单
+        document.getElementById('engineDropdown').classList.remove('show');
+
+        // 聚焦到输入框
+        document.getElementById('searchInput').focus();
+    }
+
+    // 执行搜索
+    function performSearch() {
+        const query = document.getElementById('searchInput').value.trim();
+        if (query) {
+            window.open(currentEngineUrl + encodeURIComponent(query), '_blank');
+        }
+    }
+
+    // 处理回车键
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            performSearch();
+        }
+    }
+
+    // 点击外部关闭下拉菜单
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.engine-selector')) {
+            document.getElementById('engineDropdown').classList.remove('show');
+        }
+    });
+</script>
 </body>
 </html>
