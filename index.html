@@ -14,11 +14,130 @@
         body {
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             padding: 60px 20px;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: -1;
         }
         .container {
             max-width: 1000px;
             margin: 0 auto;
+        }
+        .weather-card {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        .weather-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+        }
+        .weather-icon {
+            font-size: 40px;
+        }
+        .weather-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .weather-city {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+        .weather-temp {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+        }
+        .weather-desc {
+            font-size: 12px;
+            color: #999;
+        }
+        @media (max-width: 600px) {
+            .weather-card {
+                top: 15px;
+                left: 15px;
+                right: 15px;
+                padding: 12px 16px;
+                gap: 12px;
+            }
+            .weather-icon {
+                font-size: 32px;
+            }
+            .weather-temp {
+                font-size: 22px;
+            }
+        }
+        .stock-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+        }
+        .stock-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 14px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .stock-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            border-color: #e0e0e0;
+        }
+        .stock-icon {
+            font-size: 28px;
+        }
+        .stock-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .stock-name {
+            font-size: 13px;
+            color: #666;
+            font-weight: 500;
+        }
+        .stock-price {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+        }
+        .stock-change {
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .stock-change.up {
+            color: #e74c3c;
+        }
+        .stock-change.down {
+            color: #27ae60;
         }
         h1 {
             text-align: center;
@@ -31,7 +150,7 @@
         }
         .nav-group {
             margin-bottom: 40px;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255,255,255,0.4);
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.15);
@@ -103,7 +222,7 @@
         }
         /* 搜索栏样式 */
         .search-container {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255,255,255,0.4);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 40px;
@@ -236,21 +355,37 @@
         }
 
         @media (prefers-color-scheme: dark) {
-            body {background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);}
-            .nav-group {background: rgba(30,30,50,0.9);}
+            body::before {background: rgba(0, 0, 0, 0.5);}
+            .weather-card {background: rgba(30,30,50,0.8);}
+            .weather-city {color: #ccc;}
+            .weather-temp {color: #e5e7eb;}
+            .weather-desc {color: #888;}
+            .stock-item {background: rgba(37,37,64,0.6);}
+            .stock-item:hover {border-color: #4a4a6a;}
+            .stock-name {color: #ccc;}
+            .stock-price {color: #e5e7eb;}
+            .nav-group {background: rgba(30,30,50,0.4);}
             .group-title {color: #e5e7eb; border-bottom-color: #333;}
-            .link-item a {background: #252540; color: #ccc;}
-            .search-container {background: rgba(30,30,50,0.9);}
-            .search-box {background: #252540;}
+            .link-item a {background: rgba(37,37,64,0.6); color: #ccc;}
+            .search-container {background: rgba(30,30,50,0.4);}
+            .search-box {background: rgba(37,37,64,0.6);}
             .search-input {color: #e5e7eb;}
             .search-input::placeholder {color: #888;}
-            .engine-dropdown {background: #252540;}
+            .engine-dropdown {background: rgba(37,37,64,0.95);}
             .engine-option {color: #e5e7eb;}
             .engine-option:hover {background: #3a3a5a;}
         }
     </style>
 </head>
 <body>
+<div class="weather-card" id="weatherCard">
+    <div class="weather-icon" id="weatherIcon">🌤️</div>
+    <div class="weather-info">
+        <div class="weather-city" id="weatherCity">获取中...</div>
+        <div class="weather-temp" id="weatherTemp">--°C</div>
+        <div class="weather-desc" id="weatherDesc">加载中</div>
+    </div>
+</div>
 <div class="container">
     <h1>我的私人导航</h1>
 
@@ -312,21 +447,213 @@
         </div>
     </div>
 
-    <!-- 第三组：自定义区域，自行增删 -->
+    <!-- 第三组：生活 -->
     <div class="nav-group">
-        <h2 class="group-title">工作站点</h2>
+        <h2 class="group-title">生活</h2>
         <div class="link-box">
-            <div class="link-item"><a href="http://192.168.31.100:9091" target="_blank"><span class="icon">📡</span>Transmission</a></div>
-            <div class="link-item"><a href="https://kp.m-team.cc/" target="_blank"><span class="icon">🎯</span>M-Team</a></div>
-            <div class="link-item"><a href="https://lemonhd.net/index.php" target="_blank"><span class="icon">🍋</span>LemonHD</a></div>
-            <div class="link-item"><a href="这里替换成你的网址" target="_blank"><span class="icon">⭐</span>自定义1</a></div>
-            <div class="link-item"><a href="这里替换成你的网址" target="_blank"><span class="icon">⭐</span>自定义2</a></div>
+            <div class="link-item"><a href="https://www.ptyqm.com/" target="_blank"><span class="icon">🎫</span>PT邀请码网</a></div>
+            <div class="link-item"><a href="http://lemonhd.net/index.php" target="_blank"><span class="icon">🍋</span>LemonHD</a></div>
+            <div class="link-item"><a href="https://myprivatenav.netlify.app/" target="_blank"><span class="icon">🌐</span>我的私人导航</a></div>
+        </div>
+    </div>
+
+    <!-- 第四组：工作 -->
+    <div class="nav-group">
+        <h2 class="group-title">工作</h2>
+        <div class="link-box">
+            <div class="link-item"><a href="https://219.141.182.1/" target="_blank"><span class="icon">🔒</span>隐私错误</a></div>
+            <div class="link-item"><a href="https://sso.cnncecp.com/login/" target="_blank"><span class="icon">🏢</span>中核集团电子采购</a></div>
+            <div class="link-item"><a href="https://www.chinansc.cn/haqgcs/" target="_blank"><span class="icon">☢️</span>核安全执业资格</a></div>
+            <div class="link-item"><a href="https://support.aucotec.cn/web/home/index" target="_blank"><span class="icon">🛠️</span>EB技术支持</a></div>
+            <div class="link-item"><a href="http://39.104.123.74:8088/standardview/public/index.php/admin/index/index" target="_blank"><span class="icon">📋</span>核协团标全文公开</a></div>
+            <div class="link-item"><a href="http://39.104.123.74:8088/standard/public/index.php/admin/login.html" target="_blank"><span class="icon">📊</span>核协团体标准管理</a></div>
+            <div class="link-item"><a href="https://www.caini.cn/zhhx/1223999/szhzx/1431503/index.html" target="_blank"><span class="icon">📱</span>核协E+</a></div>
+        </div>
+    </div>
+
+    <!-- 第五组：学习 -->
+    <div class="nav-group">
+        <h2 class="group-title">学习</h2>
+        <div class="link-box">
+            <div class="link-item"><a href="https://gitee.com/babysor/MockingBird" target="_blank"><span class="icon">🗣️</span>MockingBird</a></div>
+            <div class="link-item"><a href="https://dingniu.suyangx.com/learnspace/learn/learn/xsc/au_steamList.action?params.projectId=402882fd946eb3a601952289139301fd" target="_blank"><span class="icon">🐂</span>顶牛闯关</a></div>
+            <div class="link-item"><a href="https://julebu.co/" target="_blank"><span class="icon">📝</span>句乐部</a></div>
+            <div class="link-item"><a href="https://www.bohrium.com/" target="_blank"><span class="icon">⚛️</span>玻尔AI</a></div>
+            <div class="link-item"><a href="https://www.datawhale.cn/home" target="_blank"><span class="icon">🐋</span>Datawhale</a></div>
+            <div class="link-item"><a href="https://www.niunep.com/oauth/#login/cmVzcG9uc2VfdHlwZT10b2tlbiZjbGllbnRfaWQ9OTk5JnJlZGlyZWN0X3VyaT1odHRwcyUzQSUyRiUyRnd3dy5uaXVuZXAuY29tJnN0YXRlPSUyRmhvbWUtdiUzRmlkJTNEMTI1NDU4Jmxhbmc9Y24mY2FuY2VsUmVtZW1iZXJTdGF0ZT0w" target="_blank"><span class="icon">🏭</span>中核集团</a></div>
+            <div class="link-item"><a href="https://uinodes.com/" target="_blank"><span class="icon">🧩</span>uinodes</a></div>
+            <div class="link-item"><a href="https://nucleus.iaea.org/sites/committees" target="_blank"><span class="icon">🌍</span>IAEA CSS</a></div>
+            <div class="link-item"><a href="https://docs.soybeanjs.cn/zh/" target="_blank"><span class="icon">🌱</span>SoybeanAdmin</a></div>
+            <div class="link-item"><a href="https://pure-admin.cn/pages/start/" target="_blank"><span class="icon">⚡</span>Pure Admin</a></div>
+            <div class="link-item"><a href="https://cloud.aucotec.cn:888/RDWeb/Pages/zh-CN/login.aspx?ReturnUrl=/RDWeb/Pages/zh-CN/Default.aspx" target="_blank"><span class="icon">🖥️</span>RD Web</a></div>
+            <div class="link-item"><a href="https://yun.aura.cn/Packet/detail/lid/764.html" target="_blank"><span class="icon">📚</span>光环云课堂</a></div>
+            <div class="link-item"><a href="https://pan.baidu.com/s/1I7wJEasY79IekNO7UMlb-A#list/path=%2FPMP%E7%94%B5%E5%AD%90%E8%B5%84%E6%96%99%EF%BC%88NEW%EF%BC%89%2F1%E3%80%81PMP%E5%AD%A6%E4%B9%A0%E7%94%B5%E5%AD%90%E4%B9%A6" target="_blank"><span class="icon">☁️</span>百度网盘</a></div>
+        </div>
+    </div>
+
+    <!-- 第六组：股市指数 -->
+    <div class="nav-group">
+        <h2 class="group-title">股市指数</h2>
+        <div class="stock-box" id="stockBox">
+            <div class="stock-item" data-code="sh000001">
+                <div class="stock-icon">📈</div>
+                <div class="stock-info">
+                    <div class="stock-name">上证指数</div>
+                    <div class="stock-price">--</div>
+                    <div class="stock-change">--%</div>
+                </div>
+            </div>
+            <div class="stock-item" data-code="sz399001">
+                <div class="stock-icon">📉</div>
+                <div class="stock-info">
+                    <div class="stock-name">深证成指</div>
+                    <div class="stock-price">--</div>
+                    <div class="stock-change">--%</div>
+                </div>
+            </div>
+            <div class="stock-item" data-code="sz399006">
+                <div class="stock-icon">📊</div>
+                <div class="stock-info">
+                    <div class="stock-name">创业板指</div>
+                    <div class="stock-price">--</div>
+                    <div class="stock-change">--%</div>
+                </div>
+            </div>
+            <div class="stock-item" data-code="sh000300">
+                <div class="stock-icon">📈</div>
+                <div class="stock-info">
+                    <div class="stock-name">沪深300</div>
+                    <div class="stock-price">--</div>
+                    <div class="stock-change">--%</div>
+                </div>
+            </div>
+            <div class="stock-item" data-code="sh000016">
+                <div class="stock-icon">📉</div>
+                <div class="stock-info">
+                    <div class="stock-name">上证50</div>
+                    <div class="stock-price">--</div>
+                    <div class="stock-change">--%</div>
+                </div>
+            </div>
+            <div class="stock-item" data-code="sh000688">
+                <div class="stock-icon">📊</div>
+                <div class="stock-info">
+                    <div class="stock-name">科创50</div>
+                    <div class="stock-price">--</div>
+                    <div class="stock-change">--%</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
     let currentEngineUrl = 'https://www.baidu.com/s?wd=';
+
+    // 获取必应每日壁纸
+    function setBingBackground() {
+        const apiUrl = 'https://bing.img.run/rand.php';
+        document.body.style.backgroundImage = `url(${apiUrl})`;
+    }
+
+    // 获取天气信息
+    async function fetchWeather() {
+        const apiUrl = 'https://wttr.in/?format=j1&lang=zh';
+        const timeout = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('请求超时')), 10000);
+        });
+        try {
+            const response = await Promise.race([fetch(apiUrl), timeout]);
+            const data = await response.json();
+            if (data && data.current_condition && data.current_condition.length > 0) {
+                const city = data.nearest_area[0].areaName[0].value;
+                const temp = data.current_condition[0].temp_C;
+                const desc = data.current_condition[0].weatherDesc[0].value;
+                const weatherCode = data.current_condition[0].weatherCode;
+                
+                document.getElementById('weatherCity').textContent = city;
+                document.getElementById('weatherTemp').textContent = `${temp}°C`;
+                document.getElementById('weatherDesc').textContent = desc;
+                document.getElementById('weatherIcon').textContent = getWeatherIcon(weatherCode);
+            }
+        } catch (error) {
+            console.log('获取天气失败:', error);
+            document.getElementById('weatherCity').textContent = '获取失败';
+            document.getElementById('weatherDesc').textContent = '点击刷新';
+            document.getElementById('weatherCard').style.cursor = 'pointer';
+            document.getElementById('weatherCard').addEventListener('click', fetchWeather);
+        }
+    }
+
+    // 根据天气代码获取emoji图标
+    function getWeatherIcon(code) {
+        const iconMap = {
+            '113': '☀️', '116': '⛅', '119': '☁️', '122': '☁️',
+            '143': '🌫️', '176': '🌦️', '179': '🌧️', '182': '🌧️', '185': '🌧️',
+            '200': '⛈️', '227': '🌨️', '230': '❄️', '248': '🌫️', '260': '🌫️',
+            '263': '🌦️', '266': '🌦️', '281': '🌧️', '284': '🌧️', '293': '🌧️',
+            '296': '🌧️', '299': '🌧️', '302': '🌧️', '305': '🌧️', '308': '🌧️',
+            '311': '🌧️', '314': '🌧️', '317': '🌧️', '320': '🌨️', '323': '🌨️',
+            '326': '🌨️', '329': '❄️', '332': '❄️', '335': '❄️', '338': '❄️',
+            '350': '🌧️', '353': '🌦️', '356': '🌧️', '359': '🌧️', '362': '🌧️',
+            '365': '🌧️', '368': '🌨️', '371': '❄️', '374': '🌨️', '377': '🌨️',
+            '386': '⛈️', '389': '⛈️', '392': '⛈️', '395': '❄️'
+        };
+        return iconMap[code] || '🌤️';
+    }
+
+    // 获取股票指数数据
+    function fetchStockData() {
+        const codes = ['sh000001', 'sz399001', 'sz399006', 'sh000300', 'sh000016', 'sh000688'];
+        const apiUrl = `https://qt.gtimg.cn/q=${codes.join(',')}`;
+        
+        const script = document.createElement('script');
+        script.src = apiUrl;
+        script.onload = () => script.remove();
+        script.onerror = () => {
+            script.remove();
+            console.log('获取股票数据失败');
+        };
+        
+        window.stockCallback = function(data) {
+            Object.keys(data).forEach(code => {
+                const item = data[code];
+                if (!item) return;
+                
+                const arr = item.split('~');
+                const price = arr[3];
+                const changePercent = arr[32];
+                const change = parseFloat(changePercent);
+                
+                const stockItem = document.querySelector(`.stock-item[data-code="${code}"]`);
+                if (stockItem) {
+                    const priceEl = stockItem.querySelector('.stock-price');
+                    const changeEl = stockItem.querySelector('.stock-change');
+                    const iconEl = stockItem.querySelector('.stock-icon');
+                    
+                    if (priceEl) priceEl.textContent = price;
+                    if (changeEl) {
+                        changeEl.textContent = `${change >= 0 ? '+' : ''}${changePercent}%`;
+                        changeEl.className = `stock-change ${change > 0 ? 'up' : change < 0 ? 'down' : ''}`;
+                    }
+                    if (iconEl) {
+                        iconEl.textContent = change > 0 ? '📈' : change < 0 ? '📉' : '📊';
+                    }
+                }
+            });
+        };
+        
+        script.src = `${apiUrl}&callback=stockCallback`;
+        document.head.appendChild(script);
+    }
+
+    // 页面加载完成后设置壁纸、天气和股票数据
+    document.addEventListener('DOMContentLoaded', () => {
+        setBingBackground();
+        fetchWeather();
+        fetchStockData();
+        setInterval(fetchStockData, 60000);
+    });
 
     // 切换下拉菜单
     function toggleDropdown() {
