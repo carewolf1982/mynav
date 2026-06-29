@@ -672,7 +672,7 @@
                 // 全天预报
                 const maxTemp = today.maxtempC;
                 const minTemp = today.mintempC;
-                const chanceofrain = today.hourly[4] ? today.hourly[4].chanceofrain : today.hourly[0].chanceofrain;
+                const chanceofrain = today.hourly.reduce((max, h) => Math.max(max, parseInt(h.chanceofrain) || 0), 0);
 
                 document.getElementById('weatherCity').textContent = city;
                 document.getElementById('weatherDate').textContent = dateStr;
