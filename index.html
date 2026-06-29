@@ -31,7 +31,7 @@
             z-index: -1;
         }
         .container {
-            max-width: 1000px;
+            max-width: 1300px;
             margin: 0 auto;
         }
         .weather-card {
@@ -44,27 +44,33 @@
             padding: 16px 20px;
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 20px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             z-index: 100;
             transition: all 0.3s ease;
+            min-width: 280px;
         }
         .weather-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
         }
         .weather-icon {
-            font-size: 40px;
+            font-size: 48px;
+            line-height: 1;
         }
-        .weather-info {
+        .weather-main {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 4px;
         }
         .weather-city {
             font-size: 14px;
             color: #666;
             font-weight: 500;
+        }
+        .weather-date {
+            font-size: 12px;
+            color: #888;
         }
         .weather-temp {
             font-size: 28px;
@@ -72,7 +78,26 @@
             color: #333;
         }
         .weather-desc {
-            font-size: 12px;
+            font-size: 13px;
+            color: #666;
+        }
+        .weather-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-left: auto;
+            text-align: right;
+        }
+        .weather-detail-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+        .weather-detail-row .label {
+            font-size: 11px;
             color: #999;
         }
         @media (max-width: 600px) {
@@ -82,9 +107,10 @@
                 right: 15px;
                 padding: 12px 16px;
                 gap: 12px;
+                min-width: auto;
             }
             .weather-icon {
-                font-size: 32px;
+                font-size: 36px;
             }
             .weather-temp {
                 font-size: 22px;
@@ -201,6 +227,17 @@
             justify-content: center;
             font-size: 28px;
             transition: transform 0.3s;
+        }
+        .link-item a .icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .link-item a .icon svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
         }
         .link-item a:hover {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -358,8 +395,11 @@
             body::before {background: rgba(0, 0, 0, 0.5);}
             .weather-card {background: rgba(30,30,50,0.8);}
             .weather-city {color: #ccc;}
+            .weather-date {color: #888;}
             .weather-temp {color: #e5e7eb;}
             .weather-desc {color: #888;}
+            .weather-detail-row {color: #888;}
+            .weather-detail-row .label {color: #666;}
             .stock-item {background: rgba(37,37,64,0.6);}
             .stock-item:hover {border-color: #4a4a6a;}
             .stock-name {color: #ccc;}
@@ -380,10 +420,25 @@
 <body>
 <div class="weather-card" id="weatherCard">
     <div class="weather-icon" id="weatherIcon">🌤️</div>
-    <div class="weather-info">
+    <div class="weather-main">
         <div class="weather-city" id="weatherCity">获取中...</div>
+        <div class="weather-date" id="weatherDate">--</div>
         <div class="weather-temp" id="weatherTemp">--°C</div>
         <div class="weather-desc" id="weatherDesc">加载中</div>
+    </div>
+    <div class="weather-detail">
+        <div class="weather-detail-row">
+            <span class="label">最高</span>
+            <span id="weatherMax">--°</span>
+        </div>
+        <div class="weather-detail-row">
+            <span class="label">最低</span>
+            <span id="weatherMin">--°</span>
+        </div>
+        <div class="weather-detail-row" id="weatherRainRow">
+            <span class="label">降水</span>
+            <span id="weatherRain">--%</span>
+        </div>
     </div>
 </div>
 <div class="container">
@@ -429,19 +484,22 @@
     <div class="nav-group">
         <h2 class="group-title">常用工具</h2>
         <div class="link-box">
-            <div class="link-item"><a href="https://www.baidu.com" target="_blank"><span class="icon">🔍</span>百度</a></div>
-            <div class="link-item"><a href="https://www.bing.com" target="_blank"><span class="icon">🌐</span>必应</a></div>
-            <div class="link-item"><a href="https://github.com" target="_blank"><span class="icon">🐙</span>Github</a></div>
-            <div class="link-item"><a href="https://gitee.com" target="_blank"><span class="icon">🐱</span>Gitee</a></div>
-            <div class="link-item"><a href="https://mail.163.com" target="_blank"><span class="icon">📧</span>网易邮箱</a></div>
-            <div class="link-item"><a href="https://mail.qq.com" target="_blank"><span class="icon">✉️</span>QQ邮箱</a></div>
-            <div class="link-item"><a href="https://wx.qq.com" target="_blank"><span class="icon">💬</span>微信网页版</a></div>
-            <div class="link-item"><a href="https://pan.baidu.com/s/1I7wJEasY79IekNO7UMlb-A#list/path=%2FPMP%E7%94%B5%E5%AD%90%E8%B5%84%E6%96%99%EF%BC%88NEW%EF%BC%89%2F1%E3%80%81PMP%E5%AD%A6%E4%B9%A0%E7%94%B5%E5%AD%90%E4%B9%A6" target="_blank"><span class="icon">☁️</span>百度网盘</a></div>
-            <div class="link-item"><a href="https://www.douban.com" target="_blank"><span class="icon">📖</span>豆瓣</a></div>
-            <div class="link-item"><a href="https://www.zhihu.com" target="_blank"><span class="icon">🧠</span>知乎</a></div>
-            <div class="link-item"><a href="https://www.csdn.net" target="_blank"><span class="icon">💻</span>CSDN</a></div>
-            <div class="link-item"><a href="https://leetcode.cn" target="_blank"><span class="icon">📝</span>力扣</a></div>
-            <div class="link-item"><a href="http://192.168.31.100:9091" target="_blank"><span class="icon">📡</span>Transmission</a></div>
+            <div class="link-item"><a href="https://www.baidu.com" target="_blank"><span class="icon"><img src="icons/baidu_com.ico"></span>百度</a></div>
+            <div class="link-item"><a href="https://www.bing.com" target="_blank"><span class="icon"><img src="icons/bing_com.ico"></span>必应</a></div>
+            <div class="link-item"><a href="https://www.google.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></span>Google</a></div>
+            <div class="link-item"><a href="https://github.com" target="_blank"><span class="icon"><img src="icons/github_com.ico"></span>Github</a></div>
+            <div class="link-item"><a href="https://gitee.com" target="_blank"><span class="icon"><img src="icons/gitee_com.ico"></span>Gitee</a></div>
+            <div class="link-item"><a href="https://stackoverflow.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.3.07-.61.07-.93 0-.32-.03-.63-.07-.93l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.37-.3-.59-.22l-2.49 1c-.52-.39-1.08-.7-1.66-.94l-.38-2.65c-.03-.24-.24-.42-.48-.42h-4c-.24 0-.45.18-.48.42l-.38 2.65c-.58.24-1.14.55-1.66.94l-2.49-1c-.22-.08-.47 0-.59.22l-2 3.46c-.12.22-.07.49.12.64l2.11 1.65c-.04.3-.07.61-.07.93s.03.63.07.93l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.37.3.59.22l2.49-1c.52.39 1.08.7 1.66.94l.38 2.65c.03.24.24.42.48.42h4c.24 0 .45-.18.48-.42l.38-2.65c.58-.24 1.14-.55 1.66-.94l2.49 1c.22.08.47 0 .59-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></span>Stack Overflow</a></div>
+            <div class="link-item"><a href="https://juejin.cn" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M19.5 3h-15C3.67 3 3 3.67 3 4.5v15c0 .83.67 1.5 1.5 1.5h15c.83 0 1.5-.67 1.5-1.5v-15c0-.83-.67-1.5-1.5-1.5zm-7.85 13.33c-.32.32-.84.32-1.16 0l-3.19-3.19c-.32-.32-.32-.84 0-1.16l3.19-3.19c.32-.32.84-.32 1.16 0l3.19 3.19c.32.32.32.84 0 1.16l-3.19 3.19zm1.16-6.33l-2.04 2.04-2.04-2.04 2.04-2.04 2.04 2.04z"/></svg></span>掘金</a></div>
+            <div class="link-item"><a href="https://mail.163.com" target="_blank"><span class="icon"><img src="icons/163_com.ico"></span>网易邮箱</a></div>
+            <div class="link-item"><a href="https://mail.qq.com" target="_blank"><span class="icon"><img src="icons/qq_com.ico"></span>QQ邮箱</a></div>
+            <div class="link-item"><a href="https://wx.qq.com" target="_blank"><span class="icon"><img src="icons/wx_qq_com.ico"></span>微信网页版</a></div>
+            <div class="link-item"><a href="https://pan.baidu.com" target="_blank"><span class="icon"><img src="icons/pan_baidu_com.ico"></span>百度网盘</a></div>
+            <div class="link-item"><a href="https://www.douban.com" target="_blank"><span class="icon"><img src="icons/douban_com.ico"></span>豆瓣</a></div>
+            <div class="link-item"><a href="https://www.zhihu.com" target="_blank"><span class="icon"><img src="icons/zhihu_com.ico"></span>知乎</a></div>
+            <div class="link-item"><a href="https://www.csdn.net" target="_blank"><span class="icon"><img src="icons/csdn_net.ico"></span>CSDN</a></div>
+            <div class="link-item"><a href="https://leetcode.cn" target="_blank"><span class="icon"><img src="icons/leetcode_cn.ico"></span>力扣</a></div>
+            <div class="link-item"><a href="http://192.168.31.100:9091" target="_blank"><span class="icon"><img src="icons/transmissionbt_com.ico"></span>Transmission</a></div>
         </div>
     </div>
 
@@ -449,44 +507,76 @@
     <div class="nav-group">
         <h2 class="group-title">影音娱乐</h2>
         <div class="link-box">
-            <div class="link-item"><a href="https://www.bilibili.com" target="_blank"><span class="icon">📺</span>B站</a></div>
-            <div class="link-item"><a href="https://v.qq.com" target="_blank"><span class="icon">🎬</span>腾讯视频</a></div>
-            <div class="link-item"><a href="https://www.iqiyi.com" target="_blank"><span class="icon">🥝</span>爱奇艺</a></div>
-            <div class="link-item"><a href="https://music.163.com" target="_blank"><span class="icon">🎵</span>网易云音乐</a></div>
-            <div class="link-item"><a href="https://y.qq.com" target="_blank"><span class="icon">🎶</span>QQ音乐</a></div>
-            <div class="link-item"><a href="https://www.youtube.com" target="_blank"><span class="icon">📹</span>YouTube</a></div>
-            <div class="link-item"><a href="https://www.ptyqm.com/" target="_blank"><span class="icon">🎫</span>PT邀请码网</a></div>
-            <div class="link-item"><a href="http://lemonhd.net/index.php" target="_blank"><span class="icon">🍋</span>LemonHD</a></div>
-            <div class="link-item"><a href="https://kp.m-team.cc/" target="_blank"><span class="icon">🎯</span>M-Team</a></div>
+            <div class="link-item"><a href="https://www.bilibili.com" target="_blank"><span class="icon"><img src="icons/bilibili_com.ico"></span>B站</a></div>
+            <div class="link-item"><a href="https://v.qq.com" target="_blank"><span class="icon"><img src="icons/v_qq_com.ico"></span>腾讯视频</a></div>
+            <div class="link-item"><a href="https://www.iqiyi.com" target="_blank"><span class="icon"><img src="icons/iqiyi_com.ico"></span>爱奇艺</a></div>
+            <div class="link-item"><a href="https://www.youku.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>优酷</a></div>
+            <div class="link-item"><a href="https://www.mgtv.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></span>芒果TV</a></div>
+            <div class="link-item"><a href="https://music.163.com" target="_blank"><span class="icon"><img src="icons/music_163_com.ico"></span>网易云音乐</a></div>
+            <div class="link-item"><a href="https://y.qq.com" target="_blank"><span class="icon"><img src="icons/y_qq_com.ico"></span>QQ音乐</a></div>
+            <div class="link-item"><a href="https://www.kugou.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></span>酷狗音乐</a></div>
+            <div class="link-item"><a href="https://www.youtube.com" target="_blank"><span class="icon"><img src="icons/youtube_com.ico"></span>YouTube</a></div>
+            <div class="link-item"><a href="https://www.ptyqm.com/" target="_blank"><span class="icon"><img src="icons/ptyqm_com.ico"></span>PT邀请码网</a></div>
+            <div class="link-item"><a href="http://lemonhd.net/index.php" target="_blank"><span class="icon"><img src="icons/lemonhd_net.ico"></span>LemonHD</a></div>
+            <div class="link-item"><a href="https://kp.m-team.cc/" target="_blank"><span class="icon"><img src="icons/m-team_cc.ico"></span>M-Team</a></div>
         </div>
     </div>
 
-    <!-- 第三组：工作 -->
+    <!-- 第三组：社交媒体 -->
+    <div class="nav-group">
+        <h2 class="group-title">社交媒体</h2>
+        <div class="link-box">
+            <div class="link-item"><a href="https://weibo.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443zM9.05 17.219c-.386 0-.7-.314-.7-.7 0-.386.314-.7.7-.7.386 0 .7.314.7.7 0 .386-.314.7-.7.7zm5.9 0c-.386 0-.7-.314-.7-.7 0-.386.314-.7.7-.7.386 0 .7.314.7.7 0 .386-.314.7-.7.7zm5.9 0c-.386 0-.7-.314-.7-.7 0-.386.314-.7.7-.7.386 0 .7.314.7.7 0 .386-.314.7-.7.7z"/></svg></span>微博</a></div>
+            <div class="link-item"><a href="https://www.xiaohongshu.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg></span>小红书</a></div>
+            <div class="link-item"><a href="https://www.douyin.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></span>抖音</a></div>
+            <div class="link-item"><a href="https://www.kuaishou.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>快手</a></div>
+            <div class="link-item"><a href="https://www.linkedin.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span>领英</a></div>
+            <div class="link-item"><a href="https://twitter.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></span>Twitter</a></div>
+        </div>
+    </div>
+
+    <!-- 第四组：购物 -->
+    <div class="nav-group">
+        <h2 class="group-title">购物</h2>
+        <div class="link-box">
+            <div class="link-item"><a href="https://www.taobao.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M7 16h-2v-4h2v4zm0-6h-2V7h2v3zm6 10h-2v-4h2v4zm0-6h-2v-4h2v4zm0-6h-2V7h2v3zm6 10h-2v-4h2v4zm0-6h-2v-4h2v4zm0-6h-2V7h2v3z"/></svg></span>淘宝</a></div>
+            <div class="link-item"><a href="https://www.jd.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M18 6h-2v12h2V6zm-4 0h-2v12h2V6zm-4 0H6v12h2V6zm-3 1h2v2H3V7zm0 4h2v2H3v-2zm0 4h2v2H3v-2zm18-8h-2v2h2V7zm0 4h-2v2h2v-2zm0 4h-2v2h2v-2zM3 3h18v2H3V3z"/></svg></span>京东</a></div>
+            <div class="link-item"><a href="https://www.pinduoduo.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></span>拼多多</a></div>
+            <div class="link-item"><a href="https://www.amazon.cn" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M19.35 10.04A7.49 7.49 0 0012 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 000 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17l4.59-4.59L16 11l-6 6z"/></svg></span>亚马逊</a></div>
+            <div class="link-item"><a href="https://www.suning.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></span>苏宁易购</a></div>
+            <div class="link-item"><a href="https://www.smzdm.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>什么值得买</a></div>
+        </div>
+    </div>
+
+    <!-- 第五组：工作 -->
     <div class="nav-group">
         <h2 class="group-title">工作</h2>
         <div class="link-box">
-            <div class="link-item"><a href="https://sso.cnncecp.com/login/" target="_blank"><span class="icon">🏢</span>中核集团电子采购</a></div>
-            <div class="link-item"><a href="https://www.chinansc.cn/haqgcs/" target="_blank"><span class="icon">☢️</span>核安全执业资格</a></div>
-            <div class="link-item"><a href="https://support.aucotec.cn/web/home/index" target="_blank"><span class="icon">🛠️</span>EB技术支持</a></div>
-            <div class="link-item"><a href="http://39.104.123.74:8088/standardview/public/index.php/admin/index/index" target="_blank"><span class="icon">📋</span>核协团标全文公开</a></div>
-            <div class="link-item"><a href="http://39.104.123.74:8088/standard/public/index.php/admin/login.html" target="_blank"><span class="icon">📊</span>核协团体标准管理</a></div>
-            <div class="link-item"><a href="https://www.caini.cn/zhhx/1223999/szhzx/1431503/index.html" target="_blank"><span class="icon">📱</span>核协E+</a></div>
-            <div class="link-item"><a href="https://www.niunep.com/oauth/#login/cmVzcG9uc2VfdHlwZT10b2tlbiZjbGllbnRfaWQ9OTk5JnJlZGlyZWN0X3VyaT1odHRwcyUzQSUyRiUyRnd3dy5uaXVuZXAuY29tJnN0YXRlPSUyRmhvbWUtdiUzRmlkJTNEMTI1NDU4Jmxhbmc9Y24mY2FuY2VsUmVtZW1iZXJTdGF0ZT0w" target="_blank"><span class="icon">🏭</span>中核集团</a></div>
+            <div class="link-item"><a href="https://sso.cnncecp.com/login/" target="_blank"><span class="icon"><img src="icons/cnncecp_com.ico"></span>中核集团电子采购</a></div>
+            <div class="link-item"><a href="https://www.chinansc.cn/haqgcs/" target="_blank"><span class="icon"><img src="icons/chinansc_cn.ico"></span>核安全执业资格</a></div>
+            <div class="link-item"><a href="https://support.aucotec.cn/web/home/index" target="_blank"><span class="icon"><img src="icons/aucotec_cn.ico"></span>EB技术支持</a></div>
+            <div class="link-item"><a href="http://39.104.123.74:8088/standardview/public/index.php/admin/index/index" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></span>核协团标全文公开</a></div>
+            <div class="link-item"><a href="http://39.104.123.74:8088/standard/public/index.php/admin/login.html" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></span>核协团体标准管理</a></div>
+            <div class="link-item"><a href="https://www.caini.cn/zhhx/1223999/szhzx/1431503/index.html" target="_blank"><span class="icon"><img src="icons/caini_cn.ico"></span>核协E+</a></div>
+            <div class="link-item"><a href="https://www.niunep.com" target="_blank"><span class="icon"><img src="icons/niunep_com.ico"></span>中核集团</a></div>
         </div>
     </div>
 
-    <!-- 第四组：学习 -->
+    <!-- 第六组：学习 -->
     <div class="nav-group">
         <h2 class="group-title">学习</h2>
         <div class="link-box">
-            <div class="link-item"><a href="https://gitee.com/babysor/MockingBird" target="_blank"><span class="icon">🗣️</span>MockingBird</a></div>
-            <div class="link-item"><a href="https://dingniu.suyangx.com/learnspace/learn/learn/xsc/au_steamList.action?params.projectId=402882fd946eb3a601952289139301fd" target="_blank"><span class="icon">🐂</span>顶牛闯关</a></div>
-            <div class="link-item"><a href="https://julebu.co/" target="_blank"><span class="icon">📝</span>句乐部</a></div>
-            <div class="link-item"><a href="https://www.bohrium.com/" target="_blank"><span class="icon">⚛️</span>玻尔AI</a></div>
-            <div class="link-item"><a href="https://www.datawhale.cn/home" target="_blank"><span class="icon">🐋</span>Datawhale</a></div>
-            <div class="link-item"><a href="https://docs.soybeanjs.cn/zh/" target="_blank"><span class="icon">🌱</span>SoybeanAdmin</a></div>
-            <div class="link-item"><a href="https://pure-admin.cn/pages/start/" target="_blank"><span class="icon">⚡</span>Pure Admin</a></div>
-            <div class="link-item"><a href="https://yun.aura.cn/Packet/detail/lid/764.html" target="_blank"><span class="icon">📚</span>光环云课堂</a></div>
+            <div class="link-item"><a href="https://gitee.com/babysor/MockingBird" target="_blank"><span class="icon"><img src="icons/gitee_com.ico"></span>MockingBird</a></div>
+            <div class="link-item"><a href="https://dingniu.suyangx.com" target="_blank"><span class="icon"><img src="icons/suyangx_com.ico"></span>顶牛闯关</a></div>
+            <div class="link-item"><a href="https://julebu.co/" target="_blank"><span class="icon"><img src="icons/julebu_co.ico"></span>句乐部</a></div>
+            <div class="link-item"><a href="https://www.bohrium.com/" target="_blank"><span class="icon"><img src="icons/bohrium_com.ico"></span>玻尔AI</a></div>
+            <div class="link-item"><a href="https://www.datawhale.cn/home" target="_blank"><span class="icon"><img src="icons/datawhale_cn.ico"></span>Datawhale</a></div>
+            <div class="link-item"><a href="https://docs.soybeanjs.cn/zh/" target="_blank"><span class="icon"><img src="icons/soybeanjs_cn.ico"></span>SoybeanAdmin</a></div>
+            <div class="link-item"><a href="https://pure-admin.cn/pages/start/" target="_blank"><span class="icon"><img src="icons/pure-admin_cn.ico"></span>Pure Admin</a></div>
+            <div class="link-item"><a href="https://yun.aura.cn" target="_blank"><span class="icon"><img src="icons/aura_cn.ico"></span>光环云课堂</a></div>
+            <div class="link-item"><a href="https://www.coursera.org" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>Coursera</a></div>
+            <div class="link-item"><a href="https://www.bilibili.com/v/knowledge" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>B站知识区</a></div>
+            <div class="link-item"><a href="https://www.imooc.com" target="_blank"><span class="icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>慕课网</a></div>
         </div>
     </div>
 
@@ -564,16 +654,34 @@
         try {
             const response = await Promise.race([fetch(apiUrl), timeout]);
             const data = await response.json();
-            if (data && data.current_condition && data.current_condition.length > 0) {
+            if (data) {
                 const city = data.nearest_area[0].areaName[0].value;
-                const temp = data.current_condition[0].temp_C;
-                const desc = data.current_condition[0].weatherDesc[0].value;
-                const weatherCode = data.current_condition[0].weatherCode;
-                
+                const today = data.weather[0];
+
+                // 获取今天日期和星期
+                const now = new Date();
+                const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+                const dateStr = `${now.getMonth() + 1}月${now.getDate()}日 ${weekdays[now.getDay()]}`;
+
+                // 当前温度和天气
+                const current = data.current_condition[0];
+                const temp = current.temp_C;
+                const desc = translateWeatherDesc(current.weatherDesc[0].value);
+                const weatherCode = current.weatherCode;
+
+                // 全天预报
+                const maxTemp = today.maxtempC;
+                const minTemp = today.mintempC;
+                const chanceofrain = today.hourly[4] ? today.hourly[4].chanceofrain : today.hourly[0].chanceofrain;
+
                 document.getElementById('weatherCity').textContent = city;
+                document.getElementById('weatherDate').textContent = dateStr;
                 document.getElementById('weatherTemp').textContent = `${temp}°C`;
                 document.getElementById('weatherDesc').textContent = desc;
                 document.getElementById('weatherIcon').textContent = getWeatherIcon(weatherCode);
+                document.getElementById('weatherMax').textContent = `${maxTemp}°`;
+                document.getElementById('weatherMin').textContent = `${minTemp}°`;
+                document.getElementById('weatherRain').textContent = `${chanceofrain}%`;
             }
         } catch (error) {
             console.log('获取天气失败:', error);
@@ -582,6 +690,54 @@
             document.getElementById('weatherCard').style.cursor = 'pointer';
             document.getElementById('weatherCard').addEventListener('click', fetchWeather);
         }
+    }
+
+    // 翻译天气描述为中文
+    function translateWeatherDesc(desc) {
+        const descMap = {
+            'Sunny': '晴天',
+            'Partly cloudy': '多云',
+            'Cloudy': '阴天',
+            'Overcast': '阴天',
+            'Mist': '薄雾',
+            'Fog': '大雾',
+            'Light rain': '小雨',
+            'Moderate rain': '中雨',
+            'Heavy rain': '大雨',
+            'Light snow': '小雪',
+            'Moderate snow': '中雪',
+            'Heavy snow': '大雪',
+            'Thunder': '雷暴',
+            'Light drizzle': '毛毛雨',
+            'Patchy rain possible': '局部有雨',
+            'Light rain shower': '小雨阵',
+            'Moderate or heavy rain shower': '中到大阵雨',
+            'Light sleet': '雨夹雪',
+            'Light sleet showers': '雨夹雪阵',
+            'Blowing snow': '吹雪',
+            'Blizzard': '暴雪',
+            'Freezing drizzle': '冻雨',
+            'Freezing rain': '冻雨',
+            'Heavy freezing drizzle': '大冻雨',
+            'Torrential rain': '暴雨',
+            'Patchy light drizzle': '局部毛毛雨',
+            'Patchy light rain': '局部小雨',
+            'Patchy moderate rain': '局部中雨',
+            'Patchy heavy rain': '局部大雨',
+            'Moderate or heavy snow showers': '中到大阵雪',
+            'Light snow showers': '小阵雪',
+            'Heavy snow showers': '大阵雪',
+            'Moderate or heavy sleet': '中到大雨夹雪',
+            'Moderate or heavy sleet showers': '中到大雨夹雪阵',
+            'Ice pellets': '冰粒',
+            'Heavy rain shower': '大阵雨',
+            'Moderate rain at times': '阵雨',
+            'Light rain at times': '阵雨',
+            'Heavy rain at times': '阵雨',
+            'Clear': '晴',
+            'Partly cloudy ': '多云'
+        };
+        return descMap[desc] || desc;
     }
 
     // 根据天气代码获取emoji图标
