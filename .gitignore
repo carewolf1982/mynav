@@ -1,0 +1,6 @@
+nav.db
+.wrangler/
+__pycache__/
+*.pyc
+node_modules/
+.env

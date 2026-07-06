@@ -1,0 +1,8 @@
+name = "mynav"
+compatibility_date = "2026-07-02"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nav-db"
+database_id = "f65c979a-134d-420e-9ac7-32a99690db62"

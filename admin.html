@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航管理后台</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="login-box" id="login">
+        <h2>管理员登录</h2>
+        <input type="password" id="pwdInput" placeholder="输入管理密码">
+        <button onclick="login()">登录</button>
+    </div>
+
+    <div class="container hidden" id="adminPanel">
+        <div class="admin-header">
+            <h1>导航管理后台</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="showPwdModal()">修改密码</button>
+                <a href="/" class="btn btn-secondary">返回首页</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>新增站点</h3>
+            <div class="form-grid">
+                <select id="newCat">
+                    <option value="">请选择分类</option>
+                </select>
+                <input id="newTitle" placeholder="站点名称">
+                <input id="newUrl" placeholder="网址">
+                <input id="newIcon" placeholder="图标SVG代码（可选）">
+                <textarea id="newDesc" placeholder="简介"></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="addLink()">添加站点</button>
+        </div>
+
+        <div class="section">
+            <h3>新增分类</h3>
+            <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                <input id="newCatName" placeholder="分类名称">
+                <input id="newCatSort" type="number" placeholder="排序（数字越小越靠前）" value="0">
+            </div>
+            <button class="btn btn-primary" onclick="addCategory()">添加分类</button>
+        </div>
+
+        <div class="section">
+            <h3>新增股票</h3>
+            <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                <input id="newStockCode" placeholder="股票代码（如 sh000001）">
+                <input id="newStockName" placeholder="股票名称">
+                <input id="newStockSort" type="number" placeholder="排序" value="0">
+            </div>
+            <button class="btn btn-primary" onclick="addStock()">添加股票</button>
+        </div>
+
+        <div class="section">
+            <h3>分类列表</h3>
+            <div class="table-container">
+                <table id="catTable">
+                    <thead>
+                        <tr><th>ID</th><th>名称</th><th>排序</th><th>操作</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>站点列表</h3>
+            <div class="table-container">
+                <table id="linkTable">
+                    <thead>
+                        <tr><th>ID</th><th>分类</th><th>名称</th><th>网址</th><th>操作</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>股票列表</h3>
+            <div class="table-container">
+                <table id="stockTable">
+                    <thead>
+                        <tr><th>ID</th><th>代码</th><th>名称</th><th>排序</th><th>操作</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="pwdModal">
+        <div class="modal-content">
+            <h3>修改密码</h3>
+            <input type="password" id="oldPwd" placeholder="当前密码">
+            <input type="password" id="newPwd" placeholder="新密码">
+            <input type="password" id="confirmPwd" placeholder="确认新密码">
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('pwdModal')">取消</button>
+                <button class="btn btn-primary" onclick="changePwd()">确认修改</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
