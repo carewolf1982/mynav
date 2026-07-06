@@ -19,10 +19,11 @@
 
 ## 项目结构
 
-```
+```text
 mynav/
 ├── css/                 # 样式文件
 │   ├── admin.css        # 管理后台样式
+│   ├── common.css       # 公共样式（变量、组件）
 │   └── style.css        # 主页样式
 ├── functions/           # Cloudflare Pages Functions
 │   └── api/nav.js       # API 接口
@@ -56,16 +57,16 @@ python init-db.py
 python server.py
 ```
 
-服务器将在 http://localhost:8080 运行。
+服务器将在 [http://localhost:8080](http://localhost:8080) 运行。
 
 ### 访问地址
 
-- **主页**：http://localhost:8080/index.html
-- **管理后台**：http://localhost:8080/admin.html（默认密码：123456）
+- **主页**：[http://localhost:8080/index.html](http://localhost:8080/index.html)
+- **管理后台**：[http://localhost:8080/admin.html](http://localhost:8080/admin.html)（默认密码：123456）
 
 ## Cloudflare 部署
 
-### 环境要求
+### 环境准备
 
 - Node.js 18+
 - Wrangler CLI
@@ -90,19 +91,19 @@ wrangler pages deploy .
 
 ## API 接口
 
-| 接口 | 方法 | 说明 |
-|------|------|------|
-| `/api/nav/list` | GET | 获取所有分类、链接和股票数据 |
-| `/api/nav/link` | POST | 新增网站链接（需认证） |
-| `/api/nav/link` | PUT | 修改网站链接（需认证） |
-| `/api/nav/link?id=` | DELETE | 删除网站链接（需认证） |
-| `/api/nav/category` | POST | 新增分类（需认证） |
-| `/api/nav/category` | PUT | 修改分类（需认证） |
-| `/api/nav/category?id=` | DELETE | 删除分类（需认证） |
-| `/api/nav/stock` | POST | 新增股票（需认证） |
-| `/api/nav/stock` | PUT | 修改股票（需认证） |
-| `/api/nav/stock?id=` | DELETE | 删除股票（需认证） |
-| `/api/nav/pwd` | POST | 修改管理密码（需认证） |
+| 接口              | 方法   | 说明                     |
+|:------------------|:-------|:-------------------------|
+| `/api/nav/list`   | GET    | 获取所有分类、链接和股票数据 |
+| `/api/nav/link`   | POST   | 新增网站链接（需认证）       |
+| `/api/nav/link`   | PUT    | 修改网站链接（需认证）       |
+| `/api/nav/link?id=` | DELETE | 删除网站链接（需认证）       |
+| `/api/nav/category` | POST   | 新增分类（需认证）          |
+| `/api/nav/category` | PUT    | 修改分类（需认证）          |
+| `/api/nav/category?id=` | DELETE | 删除分类（需认证）          |
+| `/api/nav/stock`  | POST   | 新增股票（需认证）          |
+| `/api/nav/stock`  | PUT    | 修改股票（需认证）          |
+| `/api/nav/stock?id=` | DELETE | 删除股票（需认证）          |
+| `/api/nav/pwd`    | POST   | 修改管理密码（需认证）        |
 
 ### 认证方式
 
@@ -112,39 +113,39 @@ wrangler pages deploy .
 
 ### nav_category（分类表）
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | INTEGER | 主键，自增 |
-| name | TEXT | 分类名称 |
-| sort | INTEGER | 排序序号 |
+| 字段   | 类型    | 说明     |
+|:-------|:--------|:---------|
+| id     | INTEGER | 主键，自增 |
+| name   | TEXT    | 分类名称   |
+| sort   | INTEGER | 排序序号   |
 
 ### nav_link（链接表）
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | INTEGER | 主键，自增 |
-| category_id | INTEGER | 所属分类 ID |
-| title | TEXT | 网站名称 |
-| url | TEXT | 网站地址 |
-| icon | TEXT | 图标（SVG） |
-| desc | TEXT | 描述 |
-| sort | INTEGER | 排序序号 |
+| 字段         | 类型    | 说明       |
+|:-------------|:--------|:-----------|
+| id           | INTEGER | 主键，自增   |
+| category_id  | INTEGER | 所属分类 ID |
+| title        | TEXT    | 网站名称     |
+| url          | TEXT    | 网站地址     |
+| icon         | TEXT    | 图标（SVG）  |
+| desc         | TEXT    | 描述        |
+| sort         | INTEGER | 排序序号     |
 
 ### nav_stock（股票表）
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| id | INTEGER | 主键，自增 |
-| code | TEXT | 股票代码 |
-| name | TEXT | 股票名称 |
-| sort | INTEGER | 排序序号 |
+| 字段   | 类型    | 说明     |
+|:-------|:--------|:---------|
+| id     | INTEGER | 主键，自增 |
+| code   | TEXT    | 股票代码   |
+| name   | TEXT    | 股票名称   |
+| sort   | INTEGER | 排序序号   |
 
 ### nav_config（配置表）
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| key | TEXT | 配置键 |
-| value | TEXT | 配置值 |
+| 字段   | 类型 | 说明   |
+|:-------|:-----|:-------|
+| key    | TEXT | 配置键   |
+| value  | TEXT | 配置值   |
 
 ## 许可证
 
