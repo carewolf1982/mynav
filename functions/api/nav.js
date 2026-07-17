@@ -14,6 +14,14 @@ export default async function onRequest(context) {
 
   if (request.method === "OPTIONS") return new Response(null, { headers });
 
+  if (path === "/api/nav/login" && request.method === "POST") {
+    const { pwd } = await request.json();
+    if (pwd === adminPwd) {
+      return new Response(JSON.stringify({ code: 0, msg: "登录成功" }), { headers });
+    }
+    return new Response(JSON.stringify({ code: 403, msg: "密码错误" }), { status: 403, headers });
+  }
+
   const checkAuth = () => {
     const auth = request.headers.get("Authorization");
     if (!auth || auth !== `Bearer ${adminPwd}`) {

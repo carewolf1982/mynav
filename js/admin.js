@@ -16,7 +16,7 @@ async function login() {
     if (!pwd) { alert("请输入密码"); return; }
     
     try {
-        const ret = await apiRequest('/link', 'POST', { category_id: 0, title: "test", url: "#", icon: "", desc: "", sort: 0 });
+        const ret = await apiRequest('/login', 'POST', { pwd });
         
         if (ret.code === 403) {
             alert("密码错误");
