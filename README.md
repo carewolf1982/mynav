@@ -1,43 +1,43 @@
 # mynav
 
-一个基于 Cloudflare Pages + D1 数据库构建的私人导航网站。
+一个基于 Cloudflare Pages + D1 数据库构建的个人导航网站，采用玻璃拟态设计风格，支持天气展示、多引擎搜索、股票指数和站点管理。
 
 ## 功能特性
 
-- **网站导航**：分类展示常用网站，支持自定义链接
-- **天气查询**：实时显示天气信息
-- **搜索功能**：支持多搜索引擎快速搜索
-- **股市指数**：展示股票指数，支持自定义添加股票
+- **天气卡片**：实时显示天气信息和图标
+- **多引擎搜索**：支持百度、Google、Bing 等搜索引擎切换
+- **导航链接**：分类展示常用网站链接，支持自定义添加
+- **股票指数**：实时显示股票行情，支持添加自定义股票
 - **管理后台**：密码保护的后台管理，支持分类、链接、股票的 CRUD 操作
+- **玻璃拟态设计**：现代化的渐变玻璃拟态 UI 风格
 
 ## 技术栈
 
-- **前端**：HTML5 + CSS3 + JavaScript (ES6+)
-- **后端**：Cloudflare Pages Functions / Worker
-- **数据库**：Cloudflare D1 (SQLite)
-- **本地开发**：Python 内置 HTTP 服务器
+- **前端**：HTML5 + CSS3 + JavaScript
+- **后端**：Cloudflare Pages Functions
+- **数据库**：Cloudflare D1（SQLite）
+- **部署**：Cloudflare Pages
 
 ## 项目结构
 
 ```text
 mynav/
 ├── css/                 # 样式文件
-│   ├── admin.css        # 管理后台样式
-│   ├── common.css       # 公共样式（变量、组件）
-│   └── style.css        # 主页样式
-├── functions/           # Cloudflare Pages Functions
-│   └── api/nav.js       # API 接口
+│   ├── common.css       # 公共样式和 CSS 变量
+│   ├── style.css        # 主页样式
+│   └── admin.css        # 管理后台样式
 ├── js/                  # JavaScript 文件
-│   ├── admin.js         # 管理后台脚本
-│   └── main.js          # 主页脚本
-├── admin.html           # 管理后台页面
+│   ├── main.js          # 主页逻辑
+│   └── admin.js         # 管理后台逻辑
+├── functions/           # Cloudflare Pages Functions
+│   └── api/
+│       └── nav.js       # REST API（分类、链接、股票、配置）
 ├── index.html           # 主页
-├── init-db.py           # 数据库初始化脚本
-├── nav.db               # SQLite 数据库文件（本地开发）
-├── schema.sql           # 数据库表结构定义
+├── admin.html           # 管理后台
+├── schema.sql           # 数据库初始化脚本
+├── init-db.py           # 本地数据库初始化工具
 ├── server.py            # 本地开发服务器
 ├── wrangler.toml        # Cloudflare 配置文件
-├── .gitignore           # Git 忽略文件
 └── README.md            # 项目说明
 ```
 
@@ -45,7 +45,7 @@ mynav/
 
 ### 环境要求
 
-- Python 3.x
+- Python 3.8+
 
 ### 启动开发服务器
 
@@ -80,10 +80,11 @@ npm install -g wrangler
 # 登录 Cloudflare
 wrangler login
 
-# 初始化 D1 数据库
+# 创建 D1 数据库
 wrangler d1 create nav-db
 
 # 更新 wrangler.toml 中的 database_id
+# 将 database_id 设置为上一步创建的数据库 ID
 
 # 部署到 Cloudflare Pages
 wrangler pages deploy .
@@ -91,19 +92,19 @@ wrangler pages deploy .
 
 ## API 接口
 
-| 接口              | 方法   | 说明                     |
-|:------------------|:-------|:-------------------------|
-| `/api/nav/list`   | GET    | 获取所有分类、链接和股票数据 |
-| `/api/nav/link`   | POST   | 新增网站链接（需认证）       |
-| `/api/nav/link`   | PUT    | 修改网站链接（需认证）       |
+| 接口                | 方法   | 说明                     |
+|:--------------------|:-------|:-------------------------|
+| `/api/nav/list`     | GET    | 获取所有分类、链接和股票数据 |
+| `/api/nav/link`     | POST   | 新增网站链接（需认证）       |
+| `/api/nav/link`     | PUT    | 修改网站链接（需认证）       |
 | `/api/nav/link?id=` | DELETE | 删除网站链接（需认证）       |
 | `/api/nav/category` | POST   | 新增分类（需认证）          |
 | `/api/nav/category` | PUT    | 修改分类（需认证）          |
 | `/api/nav/category?id=` | DELETE | 删除分类（需认证）          |
-| `/api/nav/stock`  | POST   | 新增股票（需认证）          |
-| `/api/nav/stock`  | PUT    | 修改股票（需认证）          |
+| `/api/nav/stock`    | POST   | 新增股票（需认证）          |
+| `/api/nav/stock`    | PUT    | 修改股票（需认证）          |
 | `/api/nav/stock?id=` | DELETE | 删除股票（需认证）          |
-| `/api/nav/pwd`    | POST   | 修改管理密码（需认证）        |
+| `/api/nav/pwd`      | POST   | 修改管理密码（需认证）        |
 
 ### 认证方式
 
