@@ -8,7 +8,7 @@ async function apiRequest(path, method = 'GET', body = null) {
     if (token) headers['Authorization'] = `Bearer ${token}`;
     const options = { method, headers };
     if (body) options.body = JSON.stringify(body);
-    const response = await fetch(`/api${path}`, options);
+    const response = await fetch(`/api/nav${path}`, options);
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }

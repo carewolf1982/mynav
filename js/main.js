@@ -5,7 +5,7 @@ let stocks = [];
 
 async function loadNavData() {
     try {
-        const res = await fetch('/api/list');
+        const res = await fetch('/api/nav/list');
         const { data } = await res.json();
         categories = data.categories;
         allLinks = data.links;
