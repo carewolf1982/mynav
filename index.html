@@ -4,69 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的私人导航</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-    <a href="/admin.html" class="admin-link">管理后台</a>
-    
-    <div class="weather-card" id="weatherCard">
-        <div class="weather-icon" id="weatherIcon">🌤️</div>
-        <div class="weather-main">
-            <div class="weather-city" id="weatherCity">获取中...</div>
-            <div class="weather-date" id="weatherDate">--</div>
-            <div class="weather-temp" id="weatherTemp">--°C</div>
-            <div class="weather-desc" id="weatherDesc">加载中</div>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-end mb-3">
+            <div class="col-auto">
+                <a href="/admin.html" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-gear"></i> 管理后台
+                </a>
+            </div>
         </div>
-        <div class="weather-detail">
-            <div class="weather-detail-row"><span class="label">最高</span><span id="weatherMax">--°</span></div>
-            <div class="weather-detail-row"><span class="label">最低</span><span id="weatherMin">--°</span></div>
-            <div class="weather-detail-row" id="weatherRainRow"><span class="label">降水</span><span id="weatherRain">--%</span></div>
-        </div>
-    </div>
 
-    <div class="container">
-        <h1>我的私人导航</h1>
-
-        <div class="search-container">
-            <div class="search-box">
-                <div class="engine-selector">
-                    <button class="engine-btn" onclick="toggleDropdown()">
-                        <span class="engine-icon" id="currentEngineIcon"><i class="fa-solid fa-search"></i></span>
-                        <span id="currentEngineName">百度</span>
-                    </button>
-                    <div class="engine-dropdown" id="engineDropdown">
-                        <div class="engine-option active" data-url="https://www.baidu.com/s?wd=" onclick="selectEngine(this)">
-                            <span class="engine-icon"><i class="fa-solid fa-search"></i></span>百度
-                        </div>
-                        <div class="engine-option" data-url="https://www.google.com/search?q=" onclick="selectEngine(this)">
-                            <span class="engine-icon"><i class="fa-brands fa-google"></i></span>Google
-                        </div>
-                        <div class="engine-option" data-url="https://www.bing.com/search?q=" onclick="selectEngine(this)">
-                            <span class="engine-icon"><i class="fa-solid fa-window-maximize"></i></span>Bing
-                        </div>
-                        <div class="engine-option" data-url="https://search.bilibili.com/all?keyword=" onclick="selectEngine(this)">
-                            <span class="engine-icon"><i class="fa-solid fa-play-circle"></i></span>哔哩哔哩
-                        </div>
-                        <div class="engine-option" data-url="https://github.com/search?q=" onclick="selectEngine(this)">
-                            <span class="engine-icon"><i class="fa-brands fa-github"></i></span>GitHub
-                        </div>
+        <div class="card mb-5 shadow-sm" id="weatherCard">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-auto text-5xl" id="weatherIcon">🌤️</div>
+                    <div class="col-md-6">
+                        <div class="h4" id="weatherCity">获取中...</div>
+                        <div class="text-muted" id="weatherDate">--</div>
+                        <div class="h2 mt-2" id="weatherTemp">--°C</div>
+                        <div class="text-muted" id="weatherDesc">加载中</div>
+                    </div>
+                    <div class="col-md-auto">
+                        <div class="text-sm"><span class="text-muted">最高</span> <span id="weatherMax" class="fw-bold">--°</span></div>
+                        <div class="text-sm"><span class="text-muted">最低</span> <span id="weatherMin" class="fw-bold">--°</span></div>
+                        <div class="text-sm" id="weatherRainRow"><span class="text-muted">降水</span> <span id="weatherRain" class="fw-bold">--%</span></div>
                     </div>
                 </div>
-                <input type="text" class="search-input" id="searchInput" placeholder="输入搜索内容，按 Enter 键搜索..." onkeypress="handleKeyPress(event)">
-                <button class="search-btn" onclick="performSearch()"><svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M10 17l5-5-5-5v10z"/></svg></button>
             </div>
+        </div>
+
+        <div class="text-center mb-5">
+            <h1 class="display-4 text-primary">我的私人导航</h1>
+        </div>
+
+        <div class="input-group mb-5 shadow-sm">
+            <div class="btn-group">
+                <button class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" id="engineBtn">
+                    <i class="fa-solid fa-search"></i> 百度
+                </button>
+                <ul class="dropdown-menu" id="engineDropdown">
+                    <li><a class="dropdown-item active" data-url="https://www.baidu.com/s?wd=" onclick="selectEngine(this)"><i class="fa-solid fa-search"></i> 百度</a></li>
+                    <li><a class="dropdown-item" data-url="https://www.google.com/search?q=" onclick="selectEngine(this)"><i class="fa-brands fa-google"></i> Google</a></li>
+                    <li><a class="dropdown-item" data-url="https://www.bing.com/search?q=" onclick="selectEngine(this)"><i class="fa-solid fa-window-maximize"></i> Bing</a></li>
+                    <li><a class="dropdown-item" data-url="https://search.bilibili.com/all?keyword=" onclick="selectEngine(this)"><i class="fa-solid fa-play-circle"></i> 哔哩哔哩</a></li>
+                    <li><a class="dropdown-item" data-url="https://github.com/search?q=" onclick="selectEngine(this)"><i class="fa-brands fa-github"></i> GitHub</a></li>
+                </ul>
+            </div>
+            <input type="text" class="form-control form-control-lg" id="searchInput" placeholder="输入搜索内容，按 Enter 键搜索..." onkeypress="handleKeyPress(event)">
+            <button class="btn btn-primary" onclick="performSearch()"><i class="fa-solid fa-search"></i></button>
         </div>
 
         <div id="nav-container"></div>
 
-        <div class="nav-group" id="stockGroup">
-            <h2 class="group-title">股市指数</h2>
-            <div class="stock-box" id="stockBox"></div>
+        <div class="card mt-5 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <i class="fa-solid fa-chart-line"></i> 股市指数
+            </div>
+            <div class="card-body">
+                <div class="row" id="stockBox"></div>
+            </div>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

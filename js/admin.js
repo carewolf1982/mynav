@@ -142,7 +142,9 @@ async function addLink() {
     const title = document.getElementById("newTitle").value.trim();
     const url = document.getElementById("newUrl").value.trim();
     const icon = document.getElementById("newIcon").value.trim();
+    const icon_color = document.getElementById("newIconColor").value.trim();
     const desc = document.getElementById("newDesc").value.trim();
+    const sort = document.getElementById("newSort").value || 0;
     
     if (!catId || !title || !url) {
         alert("请填写分类、名称和网址");
@@ -150,11 +152,13 @@ async function addLink() {
     }
     
     try {
-        await apiRequest('/link', 'POST', { category_id: catId, title, url, icon, desc, sort: 0 });
+        await apiRequest('/link', 'POST', { category_id: catId, title, url, icon, icon_color, desc, sort });
         document.getElementById("newTitle").value = "";
         document.getElementById("newUrl").value = "";
         document.getElementById("newIcon").value = "";
+        document.getElementById("newIconColor").value = "";
         document.getElementById("newDesc").value = "";
+        document.getElementById("newSort").value = "0";
         loadAll();
         alert("添加成功");
     } catch (e) {
@@ -247,12 +251,12 @@ function editLink(id) {
             row.innerHTML = `
                 <td>${link.id}</td>
                 <td>
-                    <select id="e_cat_${link.id}">
+                    <select id="e_cat_${link.id}" class="form-select">
                         ${categories.map(c => `<option value="${c.id}" ${c.id === link.category_id ? 'selected' : ''}>${c.name}</option>`).join('')}
                     </select>
                 </td>
-                <td><input id="e_title_${link.id}" value="${link.title}"></td>
-                <td><input id="e_url_${link.id}" value="${link.url}"></td>
+                <td><input id="e_title_${link.id}" class="form-control" value="${link.title}"></td>
+                <td><input id="e_url_${link.id}" class="form-control" value="${link.url}"></td>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="saveLink(${link.id})">保存</button>
                     <button class="btn btn-secondary btn-sm" onclick="loadAll()">取消</button>
@@ -272,6 +276,7 @@ async function saveLink(id) {
         title: document.getElementById(`e_title_${id}`).value.trim(),
         url: document.getElementById(`e_url_${id}`).value.trim(),
         icon: link.icon || "",
+        icon_color: link.icon_color || "",
         desc: link.desc || "",
         sort: link.sort || 0
     };
@@ -379,11 +384,8 @@ async function saveStock(id) {
 }
 
 function showPwdModal() {
-    document.getElementById("pwdModal").classList.add("show");
-}
-
-function closeModal(id) {
-    document.getElementById(id).classList.remove("show");
+    const modal = new bootstrap.Modal(document.getElementById("pwdModal"));
+    modal.show();
 }
 
 async function changePwd() {
@@ -407,7 +409,8 @@ async function changePwd() {
     try {
         await apiRequest('/pwd', 'POST', { newPwd });
         token = newPwd;
-        closeModal("pwdModal");
+        const modal = bootstrap.Modal.getInstance(document.getElementById("pwdModal"));
+        modal.hide();
         document.getElementById("oldPwd").value = "";
         document.getElementById("newPwd").value = "";
         document.getElementById("confirmPwd").value = "";
@@ -416,9 +419,3 @@ async function changePwd() {
         alert("修改失败");
     }
 }
-
-document.addEventListener('click', e => {
-    if (e.target.classList.contains('modal')) {
-        closeModal(e.target.id);
-    }
-});

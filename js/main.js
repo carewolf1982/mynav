@@ -28,14 +28,21 @@ function renderNav(filterLinks = allLinks) {
         const catLinks = filterLinks.filter(l => l.category_id === cat.id).sort((a, b) => (a.sort || 0) - (b.sort || 0));
         if (catLinks.length === 0) return;
         
-        const group = document.createElement('div');
-        group.className = 'nav-group';
-        group.innerHTML = `<h2 class="group-title">${cat.name}</h2><div class="link-box"></div>`;
+        const card = document.createElement('div');
+        card.className = 'card mb-4 shadow-sm';
+        card.innerHTML = `
+            <div class="card-header bg-primary text-white">
+                <i class="fa-solid fa-folder-open"></i> ${cat.name}
+            </div>
+            <div class="card-body">
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3"></div>
+            </div>
+        `;
         
-        const linkBox = group.querySelector('.link-box');
+        const linkBox = card.querySelector('.row');
         catLinks.forEach(link => {
-            const item = document.createElement('div');
-            item.className = 'link-item';
+            const col = document.createElement('div');
+            col.className = 'col';
             let iconHtml = '';
             if (link.icon && link.icon.startsWith('fa-')) {
                 const isBrand = link.icon_color === 'brand';
@@ -47,11 +54,16 @@ function renderNav(filterLinks = allLinks) {
             } else {
                 iconHtml = link.icon || '<svg viewBox="0 0 24 24" fill="#666"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg>';
             }
-            item.innerHTML = `<a href="${link.url}" target="_blank"><span class="icon">${iconHtml}</span>${link.title}</a>`;
-            linkBox.appendChild(item);
+            col.innerHTML = `
+                <a href="${link.url}" target="_blank" class="nav-link-item">
+                    <div class="icon">${iconHtml}</div>
+                    <div class="title">${link.title}</div>
+                </a>
+            `;
+            linkBox.appendChild(col);
         });
         
-        container.appendChild(group);
+        container.appendChild(card);
     });
 }
 
@@ -73,18 +85,19 @@ function renderStocks() {
     stocks.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     
     stocks.forEach(stock => {
-        const item = document.createElement('div');
-        item.className = 'stock-item';
-        item.setAttribute('data-code', stock.code);
-        item.innerHTML = `
-            <div class="stock-icon"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg></div>
-            <div class="stock-info">
-                <div class="stock-name">${stock.name}</div>
-                <div class="stock-price">--</div>
-                <div class="stock-change">--%</div>
+        const col = document.createElement('div');
+        col.className = 'col-md-2 col-sm-4 mb-3';
+        col.innerHTML = `
+            <div class="card stock-card" data-code="${stock.code}">
+                <div class="card-body text-center">
+                    <div class="stock-icon h3">📊</div>
+                    <div class="stock-name font-bold text-sm">${stock.name}</div>
+                    <div class="stock-price h5 mt-1">--</div>
+                    <div class="stock-change text-sm">--%</div>
+                </div>
             </div>
         `;
-        stockBox.appendChild(item);
+        stockBox.appendChild(col);
     });
 }
 
@@ -101,23 +114,17 @@ document.getElementById('searchInput').oninput = e => {
     renderNav(filtered);
 };
 
-function toggleDropdown() {
-    const dropdown = document.getElementById('engineDropdown');
-    dropdown.classList.toggle('show');
-}
-
 function selectEngine(element) {
     const url = element.getAttribute('data-url');
-    const svgIcon = element.querySelector('.engine-icon').innerHTML;
-    const name = element.textContent.trim();
+    const name = element.textContent.trim().replace(/^.*\s/, '');
     
     currentEngineUrl = url;
-    document.getElementById('currentEngineIcon').innerHTML = svgIcon;
-    document.getElementById('currentEngineName').textContent = name;
+    const btn = document.getElementById('engineBtn');
+    const iconHtml = element.querySelector('i')?.outerHTML || '<i class="fa-solid fa-search"></i>';
+    btn.innerHTML = `${iconHtml} ${name}`;
     
-    document.querySelectorAll('.engine-option').forEach(opt => opt.classList.remove('active'));
+    document.querySelectorAll('.dropdown-item').forEach(opt => opt.classList.remove('active'));
     element.classList.add('active');
-    document.getElementById('engineDropdown').classList.remove('show');
     document.getElementById('searchInput').focus();
 }
 
@@ -130,17 +137,6 @@ function performSearch() {
 
 function handleKeyPress(event) {
     if (event.key === 'Enter') performSearch();
-}
-
-document.addEventListener('click', e => {
-    if (!e.target.closest('.engine-selector')) {
-        document.getElementById('engineDropdown').classList.remove('show');
-    }
-});
-
-function setBingBackground() {
-    const apiUrl = 'https://bing.img.run/rand.php';
-    document.body.style.backgroundImage = `url(${apiUrl})`;
 }
 
 async function fetchWeather() {
@@ -213,7 +209,7 @@ function fetchStockData() {
             const changePercent = arr[32];
             const change = parseFloat(changePercent);
             
-            const stockItem = document.querySelector(`.stock-item[data-code="${code}"]`);
+            const stockItem = document.querySelector(`.stock-card[data-code="${code}"]`);
             if (stockItem) {
                 const priceEl = stockItem.querySelector('.stock-price');
                 const changeEl = stockItem.querySelector('.stock-change');
@@ -222,7 +218,7 @@ function fetchStockData() {
                 if (priceEl) priceEl.textContent = price;
                 if (changeEl) {
                     changeEl.textContent = `${change >= 0 ? '+' : ''}${changePercent}%`;
-                    changeEl.className = `stock-change ${change > 0 ? 'up' : change < 0 ? 'down' : ''}`;
+                    changeEl.className = `stock-change text-sm ${change > 0 ? 'text-red' : change < 0 ? 'text-green' : ''}`;
                 }
                 if (iconEl) {
                     iconEl.textContent = change > 0 ? '📈' : change < 0 ? '📉' : '➡️';
@@ -238,7 +234,6 @@ function fetchStockData() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    setBingBackground();
     fetchWeather();
     loadNavData();
     setInterval(fetchStockData, 60000);
