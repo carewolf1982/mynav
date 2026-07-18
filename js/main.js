@@ -36,11 +36,15 @@ function renderNav(filterLinks = allLinks) {
         catLinks.forEach(link => {
             const item = document.createElement('div');
             item.className = 'link-item';
-            const isUrl = link.icon && link.icon.startsWith('http');
-const iconHtml = isUrl 
-    ? `<img src="${link.icon}" alt="${link.title}" />` 
-    : (link.icon || '<svg viewBox="0 0 24 24" fill="#666"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg>');
-item.innerHTML = `<a href="${link.url}" target="_blank"><span class="icon">${iconHtml}</span>${link.title}</a>`;
+            let iconHtml = '';
+            if (link.icon && link.icon.startsWith('fa-')) {
+                iconHtml = `<i class="fa-solid ${link.icon}"></i>`;
+            } else if (link.icon && link.icon.startsWith('http')) {
+                iconHtml = `<img src="${link.icon}" alt="${link.title}" />`;
+            } else {
+                iconHtml = link.icon || '<svg viewBox="0 0 24 24" fill="#666"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg>';
+            }
+            item.innerHTML = `<a href="${link.url}" target="_blank"><span class="icon">${iconHtml}</span>${link.title}</a>`;
             linkBox.appendChild(item);
         });
         

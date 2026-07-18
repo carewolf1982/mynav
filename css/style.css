@@ -247,6 +247,10 @@ h1 {
     height: 100%;
     object-fit: contain;
 }
+.link-item a .icon i {
+    font-size: 22px;
+    color: inherit;
+}
 .link-item a .icon svg.logo-icon {
     fill: none;
     stroke: none;
@@ -380,6 +384,9 @@ h1 {
 }
 .engine-icon svg {
     fill: currentColor;
+}
+.engine-icon i {
+    font-size: 14px;
 }
 .engine-option.active .engine-icon img,
 .engine-option:hover .engine-icon img {
