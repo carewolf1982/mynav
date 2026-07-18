@@ -52,15 +52,15 @@ export async function onRequest(context) {
 
   if (pathname === '/api/nav/link') {
     if (method === 'POST') {
-      const { category_id, title, url, icon, desc, sort } = await request.json();
-      await db.prepare(`INSERT INTO nav_link(category_id,title,url,icon,desc,sort) VALUES(?,?,?,?,?,?)`)
-        .bind(category_id, title, url, icon, desc, sort || 0).run();
+      const { category_id, title, url, icon, icon_color, desc, sort } = await request.json();
+      await db.prepare(`INSERT INTO nav_link(category_id,title,url,icon,icon_color,desc,sort) VALUES(?,?,?,?,?,?,?)`)
+        .bind(category_id, title, url, icon, icon_color, desc, sort || 0).run();
       return json({ code: 0, msg: "新增成功" });
     }
     if (method === 'PUT') {
-      const { id, category_id, title, url, icon, desc, sort } = await request.json();
-      await db.prepare(`UPDATE nav_link SET category_id=?,title=?,url=?,icon=?,desc=?,sort=? WHERE id=?`)
-        .bind(category_id, title, url, icon, desc, sort || 0, id).run();
+      const { id, category_id, title, url, icon, icon_color, desc, sort } = await request.json();
+      await db.prepare(`UPDATE nav_link SET category_id=?,title=?,url=?,icon=?,icon_color=?,desc=?,sort=? WHERE id=?`)
+        .bind(category_id, title, url, icon, icon_color, desc, sort || 0, id).run();
       return json({ code: 0, msg: "修改成功" });
     }
     if (method === 'DELETE') {

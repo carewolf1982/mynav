@@ -38,7 +38,10 @@ function renderNav(filterLinks = allLinks) {
             item.className = 'link-item';
             let iconHtml = '';
             if (link.icon && link.icon.startsWith('fa-')) {
-                iconHtml = `<i class="fa-solid ${link.icon}"></i>`;
+                const isBrand = link.icon_color === 'brand';
+                const iconClass = isBrand ? `fa-brands ${link.icon}` : `fa-solid ${link.icon}`;
+                const colorStyle = isBrand ? '' : (link.icon_color ? `style="color: ${link.icon_color};"` : '');
+                iconHtml = `<i class="${iconClass}" ${colorStyle}></i>`;
             } else if (link.icon && link.icon.startsWith('http')) {
                 iconHtml = `<img src="${link.icon}" alt="${link.title}" />`;
             } else {

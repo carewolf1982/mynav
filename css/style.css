@@ -265,6 +265,9 @@ h1 {
 .link-item a:hover .icon img {
     filter: brightness(0) invert(1);
 }
+.link-item a:hover .icon i {
+    color: inherit;
+}
 .link-item a:hover {
     background: var(--primary-gradient);
     color: #fff;
