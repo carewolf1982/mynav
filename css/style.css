@@ -241,9 +241,11 @@ h1 {
     justify-content: center;
     transition: transform var(--transition-normal);
 }
-.link-item a .icon svg {
+.link-item a .icon svg,
+.link-item a .icon img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
 }
 .link-item a .icon svg.logo-icon {
     fill: none;
@@ -255,6 +257,9 @@ h1 {
 .link-item a:hover .icon svg:not(.logo-icon) {
     fill: #fff;
     stroke: #fff;
+}
+.link-item a:hover .icon img {
+    filter: brightness(0) invert(1);
 }
 .link-item a:hover {
     background: var(--primary-gradient);
@@ -367,10 +372,18 @@ h1 {
     width: 18px;
     height: 18px;
 }
-.engine-icon svg {
+.engine-icon svg,
+.engine-icon img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
+}
+.engine-icon svg {
     fill: currentColor;
+}
+.engine-option.active .engine-icon img,
+.engine-option:hover .engine-icon img {
+    filter: brightness(0) invert(1);
 }
 .search-input {
     flex: 1;
