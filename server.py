@@ -7,10 +7,15 @@ import os
 
 PORT = 8080
 DATABASE_PATH = 'nav.db'
-ADMIN_PWD = '123456'
 
 def get_db():
     return sqlite3.connect(DATABASE_PATH)
+
+def get_admin_pwd():
+    db = get_db()
+    result = db.execute("SELECT value FROM nav_config WHERE key='admin_pwd'").fetchone()
+    db.close()
+    return result[0] if result else '123456'
 
 def handle_api_list():
     db = get_db()
@@ -26,9 +31,10 @@ def handle_api_list():
     return json.dumps({'code': 0, 'data': {'categories': cats, 'links': link_list, 'stocks': stock_list}}, ensure_ascii=False)
 
 def check_auth(auth_header):
-    if not auth_header or auth_header != f'Bearer {ADMIN_PWD}':
+    if not auth_header:
         return False
-    return True
+    pwd = get_admin_pwd()
+    return auth_header == f'Bearer {pwd}'
 
 def handle_api_link_post(body):
     try:
@@ -182,6 +188,19 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
             
             if self.path == '/api/nav/list':
                 self.send_json_response(handle_api_list())
+                return
+            
+            if self.path == '/api/nav/login':
+                try:
+                    data = json.loads(body)
+                    pwd = data.get('pwd', '')
+                    db_pwd = get_admin_pwd()
+                    if pwd == db_pwd:
+                        self.send_json_response(json.dumps({'code': 0, 'msg': '登录成功'}), 200)
+                    else:
+                        self.send_json_response(json.dumps({'code': 403, 'msg': '密码错误'}), 403)
+                except Exception as e:
+                    self.send_json_response(json.dumps({'code': 500, 'msg': str(e)}), 500)
                 return
             
             if not check_auth(auth):

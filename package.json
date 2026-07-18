@@ -1,0 +1,11 @@
+{
+  "name": "mynav",
+  "version": "1.0.0",
+  "description": "Personal navigation page",
+  "scripts": {
+    "deploy": "wrangler pages deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.84.0"
+  }
+}

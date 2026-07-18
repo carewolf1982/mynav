@@ -5,7 +5,7 @@ let stocks = [];
 
 async function loadNavData() {
     try {
-        const res = await fetch('/api/nav/list');
+        const res = await fetch('/api/list');
         const { data } = await res.json();
         categories = data.categories;
         allLinks = data.links;
@@ -36,7 +36,7 @@ function renderNav(filterLinks = allLinks) {
         catLinks.forEach(link => {
             const item = document.createElement('div');
             item.className = 'link-item';
-            item.innerHTML = `<a href="${link.url}" target="_blank"><span class="icon">${link.icon || '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg>'}</span>${link.title}</a>`;
+            item.innerHTML = `<a href="${link.url}" target="_blank"><span class="icon">${link.icon || '<svg viewBox="0 0 24 24" fill="#666"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg>'}</span>${link.title}</a>`;
             linkBox.appendChild(item);
         });
         

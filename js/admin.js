@@ -8,7 +8,11 @@ async function apiRequest(path, method = 'GET', body = null) {
     if (token) headers['Authorization'] = `Bearer ${token}`;
     const options = { method, headers };
     if (body) options.body = JSON.stringify(body);
-    return fetch(`/api/nav${path}`, options).then(r => r.json());
+    const response = await fetch(`/api${path}`, options);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
 }
 
 async function login() {
