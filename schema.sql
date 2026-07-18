@@ -48,7 +48,7 @@ INSERT OR IGNORE INTO nav_link(category_id,title,url,icon,desc,sort) VALUES
 (1,'QQ邮箱','https://mail.qq.com','https://cdn.simpleicons.org/qqmail','邮箱服务',12),
 (1,'阿里云','https://www.aliyun.com','https://cdn.simpleicons.org/alibaba','云计算平台',13),
 (1,'M-Team','https://kp.m-team.cc/','https://cdn.simpleicons.org/torrent','PT站点',14),
-(1,'Transmission','http://localhost:9091/transmission/web/','https://cdn.simpleicons.org/transmission','BT下载管理',15),
+(1,'Transmission','http://192.168.31.100:9091/transmission/web/','https://cdn.simpleicons.org/transmission','BT下载管理',15),
 (2,'MDN','https://developer.mozilla.org','https://cdn.simpleicons.org/mozilla','Web技术文档',1),
 (2,'Stack Overflow','https://stackoverflow.com','https://cdn.simpleicons.org/stackoverflow','程序员问答社区',2),
 (2,'掘金','https://juejin.cn','https://cdn.simpleicons.org/juejin','技术社区',3),
