@@ -28,11 +28,11 @@ CREATE TABLE IF NOT EXISTS nav_config (
   value TEXT
 );
 
-INSERT OR REPLACE INTO nav_config(key,value) VALUES('admin_pwd','123456');
+INSERT OR REPLACE INTO nav_config(key,value) VALUES('admin_pwd','8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92');
 
 INSERT OR IGNORE INTO nav_category(name,sort) VALUES('常用工具',1),('技术站点',2);
 
-INSERT OR IGNORE INTO nav_stock(code,name,sort) VALUES('sh000001','上证指数',1),('sz399001','深证成指',2),('sz399006','创业板指',3),('sh000300','沪深300',4),('sh000016','上证50',5),('sh000688','科创50',6);
+INSERT OR IGNORE INTO nav_stock(code,name,sort) VALUES('sh000001','上证指数',1),('sz399001','深证成指',2),('sz399006','创业板指',3),('sh000300','沪深300',4);
 
 INSERT OR IGNORE INTO nav_link(category_id,title,url,icon,icon_color,desc,sort) VALUES
 (1,'百度','https://www.baidu.com','fa-search','#2932E1','百度搜索',1),
@@ -48,8 +48,9 @@ INSERT OR IGNORE INTO nav_link(category_id,title,url,icon,icon_color,desc,sort) 
 (1,'豆瓣','https://www.douban.com','fa-book','#07294D','书影音社区',11),
 (1,'QQ邮箱','https://mail.qq.com','fa-envelope','#0099FF','邮箱服务',12),
 (1,'阿里云','https://www.aliyun.com','fa-cloud','#FF6A00','云计算平台',13),
-(1,'M-Team','https://kp.m-team.cc/','fa-download','#6C757D','PT站点',14),
-(1,'Transmission','http://192.168.31.100:9091/transmission/web/','fa-download','#6C757D','BT下载管理',15),
+(1,'M-Team','https://kp.m-team.cc/','fa-download','#c6e985fa','PT站点',14),
+(1,'LemonHD','https://lemonhd.net/index.php','fa-download','#FFB800','PT站点',15),
+(1,'Transmission','http://192.168.31.100:9091/transmission/web/','fa-download','#c563c5ff','BT下载管理',16),
 (2,'MDN','https://developer.mozilla.org','fa-file-code','#8D67E8','Web技术文档',1),
 (2,'Stack Overflow','https://stackoverflow.com','fa-code','#F48024','程序员问答社区',2),
 (2,'掘金','https://juejin.cn','fa-gem','#FF6E40','技术社区',3),

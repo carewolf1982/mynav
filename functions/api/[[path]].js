@@ -1,4 +1,4 @@
-import { json, checkAuth } from '../utils.js';
+import { json, checkAuth, hashPassword } from '../utils.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -15,9 +15,10 @@ export async function onRequest(context) {
   }
 
   if (pathname === '/api/nav/login' && method === 'POST') {
-    const adminPwd = (await env.DB.prepare("SELECT value FROM nav_config WHERE key='admin_pwd'").first())?.value || '123456';
+    const storedHash = (await env.DB.prepare("SELECT value FROM nav_config WHERE key='admin_pwd'").first())?.value || await hashPassword('123456');
     const { pwd } = await request.json();
-    return pwd === adminPwd ? json({ code: 0, msg: "登录成功" }) : json({ code: 403, msg: "密码错误" }, 403);
+    const inputHash = await hashPassword(pwd);
+    return inputHash === storedHash ? json({ code: 0, msg: "登录成功" }) : json({ code: 403, msg: "密码错误" }, 403);
   }
 
   const authErr = await checkAuth(request, env);
@@ -27,7 +28,8 @@ export async function onRequest(context) {
 
   if (pathname === '/api/nav/pwd' && method === 'POST') {
     const { newPwd } = await request.json();
-    await db.prepare("UPDATE nav_config SET value=? WHERE key='admin_pwd'").bind(newPwd).run();
+    const hashedPwd = await hashPassword(newPwd);
+    await db.prepare("UPDATE nav_config SET value=? WHERE key='admin_pwd'").bind(hashedPwd).run();
     return json({ code: 0, msg: "密码修改成功" });
   }
 

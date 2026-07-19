@@ -197,43 +197,60 @@ function fetchStockData() {
     if (!codes) return;
     
     const apiUrl = `https://qt.gtimg.cn/q=${codes}`;
-    const script = document.createElement('script');
     
-    window.stockCallback = function(data) {
-        Object.keys(data).forEach(code => {
-            const item = data[code];
-            if (!item) return;
-            
-            const arr = item.split('~');
-            const price = arr[3];
-            const changePercent = arr[32];
-            const change = parseFloat(changePercent);
-            
-            const stockItem = document.querySelector(`.stock-card[data-code="${code}"]`);
-            if (stockItem) {
-                const priceEl = stockItem.querySelector('.stock-price');
-                const changeEl = stockItem.querySelector('.stock-change');
-                const iconEl = stockItem.querySelector('.stock-icon');
+    fetch(apiUrl)
+        .then(response => response.text())
+        .then(text => {
+            const lines = text.split(';');
+            lines.forEach(line => {
+                if (!line.trim()) return;
                 
-                if (priceEl) priceEl.textContent = price;
-                if (changeEl) {
-                    changeEl.textContent = `${change >= 0 ? '+' : ''}${changePercent}%`;
-                    changeEl.className = `stock-change text-sm ${change > 0 ? 'text-red' : change < 0 ? 'text-green' : ''}`;
+                const match = line.match(/v_(\w+)=\"([^\"]+)\"/);
+                if (!match) return;
+                
+                const code = match[1];
+                const data = match[2];
+                const arr = data.split('~');
+                
+                if (arr.length < 33) return;
+                
+                const price = arr[3];
+                const changePercent = arr[32];
+                const change = parseFloat(changePercent);
+                
+                const stockItem = document.querySelector(`.stock-card[data-code="${code}"]`);
+                if (stockItem) {
+                    const priceEl = stockItem.querySelector('.stock-price');
+                    const changeEl = stockItem.querySelector('.stock-change');
+                    const iconEl = stockItem.querySelector('.stock-icon');
+                    
+                    if (priceEl) priceEl.textContent = price;
+                    if (changeEl) {
+                        changeEl.textContent = `${change >= 0 ? '+' : ''}${changePercent}%`;
+                        changeEl.className = `stock-change text-sm ${change > 0 ? 'text-red' : change < 0 ? 'text-green' : ''}`;
+                    }
+                    if (iconEl) {
+                        iconEl.textContent = change > 0 ? '📈' : change < 0 ? '📉' : '➡️';
+                    }
                 }
-                if (iconEl) {
-                    iconEl.textContent = change > 0 ? '📈' : change < 0 ? '📉' : '➡️';
-                }
-            }
+            });
+        })
+        .catch(err => {
+            console.log('获取股票数据失败:', err);
         });
-    };
-    
-    script.src = `${apiUrl}&callback=stockCallback`;
-    script.onload = () => script.remove();
-    script.onerror = () => { script.remove(); console.log('获取股票数据失败'); };
-    document.head.appendChild(script);
+}
+
+function setBingBackground() {
+    const apiUrl = 'https://bing.img.run/rand.php';
+    document.body.style.backgroundImage = `url(${apiUrl})`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundAttachment = 'fixed';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    setBingBackground();
     fetchWeather();
     loadNavData();
     setInterval(fetchStockData, 60000);
