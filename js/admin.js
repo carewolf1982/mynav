@@ -2,6 +2,7 @@ let token = "";
 let categories = [];
 let links = [];
 let stocks = [];
+let parsedBookmarks = [];
 
 async function apiRequest(path, method = 'GET', body = null) {
     const headers = { 'Content-Type': 'application/json' };
@@ -46,12 +47,90 @@ async function loadAll() {
         stocks = data.stocks;
         renderCatSelect();
         renderIconSelect();
+        renderImportCatSelect();
         renderCategories();
         renderLinks();
         renderStocks();
     } catch (e) {
         alert("加载数据失败: " + e.message);
         console.error("加载数据失败:", e);
+    }
+}
+
+function renderImportCatSelect() {
+    const sel = document.getElementById("importCat");
+    if (!sel) return;
+    sel.innerHTML = '<option value="">选择导入到分类</option>';
+    categories.forEach(c => {
+        sel.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+    });
+}
+
+function handleBookmarkFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        parsedBookmarks = parseBookmarks(e.target.result);
+        const preview = document.getElementById("importPreview");
+        const count = document.getElementById("previewCount");
+        if (parsedBookmarks.length > 0) {
+            preview.classList.remove("d-none");
+            count.textContent = parsedBookmarks.length;
+        } else {
+            preview.classList.add("d-none");
+            alert("未解析到书签链接，请确保文件格式正确");
+        }
+    };
+    reader.readAsText(file);
+}
+
+function parseBookmarks(html) {
+    const result = [];
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const anchors = doc.querySelectorAll('a');
+    
+    anchors.forEach(a => {
+        const url = a.getAttribute('href');
+        const title = a.textContent.trim();
+        if (url && title && url.startsWith('http')) {
+            result.push({
+                title: title,
+                url: url,
+                desc: a.getAttribute('description') || ''
+            });
+        }
+    });
+    
+    return result;
+}
+
+async function importBookmarks() {
+    if (parsedBookmarks.length === 0) {
+        alert("请先选择书签文件");
+        return;
+    }
+    
+    const catId = document.getElementById("importCat").value;
+    const category_id = catId ? parseInt(catId) : 1;
+    
+    const importLinks = parsedBookmarks.map((link, index) => ({
+        ...link,
+        category_id: category_id,
+        sort: links.length + index + 1
+    }));
+    
+    try {
+        const result = await apiRequest('/import', 'POST', { links: importLinks });
+        alert(result.msg);
+        loadAll();
+        parsedBookmarks = [];
+        document.getElementById("bookmarkFile").value = "";
+        document.getElementById("importPreview").classList.add("d-none");
+    } catch (e) {
+        alert("导入失败: " + e.message);
     }
 }
 

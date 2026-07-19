@@ -90,5 +90,27 @@ export async function onRequest(context) {
     }
   }
 
+  if (pathname === '/api/nav/import' && method === 'POST') {
+    const { links: importLinks } = await request.json();
+    let successCount = 0;
+    let skipCount = 0;
+    
+    for (const link of importLinks) {
+      if (!link.url || !link.title) continue;
+      
+      const exists = await db.prepare("SELECT id FROM nav_link WHERE url=?").bind(link.url).first();
+      if (exists) {
+        skipCount++;
+        continue;
+      }
+      
+      await db.prepare(`INSERT INTO nav_link(category_id,title,url,icon,icon_color,desc,sort) VALUES(?,?,?,?,?,?,?)`)
+        .bind(link.category_id || 1, link.title, link.url, link.icon || '', link.icon_color || '', link.desc || '', link.sort || 0).run();
+      successCount++;
+    }
+    
+    return json({ code: 0, msg: `导入完成，成功${successCount}条，跳过${skipCount}条（已存在）` });
+  }
+
   return json({ code: 404, msg: "接口不存在" }, 404);
 }
