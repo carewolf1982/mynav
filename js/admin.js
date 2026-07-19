@@ -9,10 +9,17 @@ async function apiRequest(path, method = 'GET', body = null) {
     const options = { method, headers };
     if (body) options.body = JSON.stringify(body);
     const response = await fetch(`/api/nav${path}`, options);
+    const data = await response.json();
     if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (data.msg === '密码错误') {
+            token = '';
+            document.getElementById("login").classList.remove("d-none");
+            document.getElementById("adminPanel").classList.add("d-none");
+            alert(data.msg);
+        }
+        throw new Error(data.msg || `HTTP error! status: ${response.status}`);
     }
-    return response.json();
+    return data;
 }
 
 async function login() {
@@ -22,14 +29,9 @@ async function login() {
     try {
         const ret = await apiRequest('/login', 'POST', { pwd });
         
-        if (ret.code === 403) {
-            alert("密码错误");
-            return;
-        }
-        
         token = pwd;
-        document.getElementById("login").classList.add("hidden");
-        document.getElementById("adminPanel").classList.remove("hidden");
+        document.getElementById("login").classList.add("d-none");
+        document.getElementById("adminPanel").classList.remove("d-none");
         loadAll();
     } catch (e) {
         alert("登录失败，请检查网络");
@@ -43,24 +45,77 @@ async function loadAll() {
         links = data.links;
         stocks = data.stocks;
         renderCatSelect();
+        renderIconSelect();
         renderCategories();
         renderLinks();
         renderStocks();
     } catch (e) {
-        alert("加载数据失败");
+        alert("加载数据失败: " + e.message);
+        console.error("加载数据失败:", e);
     }
 }
 
+const iconOptions = [
+    { value: 'fa-search', label: '🔍 搜索' },
+    { value: 'fa-google', label: '🔷 Google' },
+    { value: 'fa-github', label: '🐙 GitHub' },
+    { value: 'fa-message-circle', label: '💬 微博' },
+    { value: 'fa-play-circle', label: '▶️ B站' },
+    { value: 'fa-shopping-bag', label: '🛍️ 淘宝' },
+    { value: 'fa-shopping-cart', label: '🛒 京东' },
+    { value: 'fa-music', label: '🎵 音乐' },
+    { value: 'fa-video', label: '📹 视频' },
+    { value: 'fa-comments', label: '💬 知乎' },
+    { value: 'fa-book', label: '📚 豆瓣' },
+    { value: 'fa-envelope', label: '✉️ 邮箱' },
+    { value: 'fa-cloud', label: '☁️ 云服务' },
+    { value: 'fa-box', label: '📦 Docker' },
+    { value: 'fa-code', label: '💻 代码' },
+    { value: 'fa-atom', label: '⚛️ React' },
+    { value: 'fa-leaf', label: '🍃 Vue' },
+    { value: 'fa-bolt', label: '⚡ Vite' },
+    { value: 'fa-network-wired', label: '🔗 Webpack' },
+    { value: 'fa-server', label: '🖥️ 服务器' },
+    { value: 'fa-database', label: '🗄️ 数据库' },
+    { value: 'fa-file-code', label: '📝 文档' },
+    { value: 'fa-chart-line', label: '📈 图表' },
+    { value: 'fa-download', label: '⬇️ 下载' },
+    { value: 'fa-home', label: '🏠 主页' },
+    { value: 'fa-globe', label: '🌐 网站' },
+    { value: 'fa-external-link', label: '🔗 链接' },
+    { value: 'fa-star', label: '⭐ 收藏' },
+    { value: 'fa-heart', label: '❤️ 喜欢' },
+    { value: 'fa-bell', label: '🔔 通知' },
+    { value: 'fa-user', label: '👤 用户' },
+    { value: 'fa-cog', label: '⚙️ 设置' },
+];
+
 function renderCatSelect() {
     const sel = document.getElementById("newCat");
+    if (!sel) return;
     sel.innerHTML = '<option value="">请选择分类</option>';
     categories.forEach(c => {
         sel.innerHTML += `<option value="${c.id}">${c.name}</option>`;
     });
 }
 
+function renderIconSelect() {
+    const sel = document.getElementById("newIcon");
+    if (!sel) return;
+    sel.innerHTML = '<option value="">请选择图标</option>';
+    iconOptions.forEach(icon => {
+        sel.innerHTML += `<option value="${icon.value}">${icon.label}</option>`;
+    });
+}
+
 function renderCategories() {
-    const tbody = document.getElementById("catTable").querySelector("tbody");
+    const table = document.getElementById("catTable");
+    if (!table) return;
+    let tbody = table.querySelector("tbody");
+    if (!tbody) {
+        tbody = document.createElement("tbody");
+        table.appendChild(tbody);
+    }
     tbody.innerHTML = "";
     
     if (categories.length === 0) {
@@ -85,7 +140,13 @@ function renderCategories() {
 }
 
 function renderLinks() {
-    const tbody = document.getElementById("linkTable").querySelector("tbody");
+    const table = document.getElementById("linkTable");
+    if (!table) return;
+    let tbody = table.querySelector("tbody");
+    if (!tbody) {
+        tbody = document.createElement("tbody");
+        table.appendChild(tbody);
+    }
     tbody.innerHTML = "";
     
     if (links.length === 0) {
@@ -99,7 +160,7 @@ function renderLinks() {
         tbody.innerHTML += `
             <tr>
                 <td>${l.id}</td>
-                <td><span class="badge badge-primary">${cat?.name || '未分类'}</span></td>
+                <td><span class="badge bg-primary">${cat?.name || '未分类'}</span></td>
                 <td>${l.title}</td>
                 <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${l.url}">${l.url}</td>
                 <td>
@@ -112,7 +173,13 @@ function renderLinks() {
 }
 
 function renderStocks() {
-    const tbody = document.getElementById("stockTable").querySelector("tbody");
+    const table = document.getElementById("stockTable");
+    if (!table) return;
+    let tbody = table.querySelector("tbody");
+    if (!tbody) {
+        tbody = document.createElement("tbody");
+        table.appendChild(tbody);
+    }
     tbody.innerHTML = "";
     
     if (stocks.length === 0) {
@@ -156,7 +223,7 @@ async function addLink() {
         document.getElementById("newTitle").value = "";
         document.getElementById("newUrl").value = "";
         document.getElementById("newIcon").value = "";
-        document.getElementById("newIconColor").value = "";
+        document.getElementById("newIconColor").value = "#007bff";
         document.getElementById("newDesc").value = "";
         document.getElementById("newSort").value = "0";
         loadAll();
@@ -248,6 +315,9 @@ function editLink(id) {
     rows.forEach(row => {
         if (row.querySelector("td:first-child").textContent == id) {
             const cat = categories.find(c => c.id === link.category_id);
+            const iconOptionsHtml = iconOptions.map(icon => 
+                `<option value="${icon.value}" ${icon.value === link.icon ? 'selected' : ''}>${icon.label}</option>`
+            ).join('');
             row.innerHTML = `
                 <td>${link.id}</td>
                 <td>
@@ -257,6 +327,15 @@ function editLink(id) {
                 </td>
                 <td><input id="e_title_${link.id}" class="form-control" value="${link.title}"></td>
                 <td><input id="e_url_${link.id}" class="form-control" value="${link.url}"></td>
+                <td>
+                    <select id="e_icon_${link.id}" class="form-select">
+                        <option value="">请选择图标</option>
+                        ${iconOptionsHtml}
+                    </select>
+                </td>
+                <td>
+                    <input id="e_icon_color_${link.id}" type="color" class="form-control" value="${link.icon_color || '#007bff'}">
+                </td>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="saveLink(${link.id})">保存</button>
                     <button class="btn btn-secondary btn-sm" onclick="loadAll()">取消</button>
@@ -275,8 +354,8 @@ async function saveLink(id) {
         category_id: document.getElementById(`e_cat_${id}`).value,
         title: document.getElementById(`e_title_${id}`).value.trim(),
         url: document.getElementById(`e_url_${id}`).value.trim(),
-        icon: link.icon || "",
-        icon_color: link.icon_color || "",
+        icon: document.getElementById(`e_icon_${id}`).value || "",
+        icon_color: document.getElementById(`e_icon_color_${id}`).value || "",
         desc: link.desc || "",
         sort: link.sort || 0
     };

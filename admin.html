@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <div class="container hidden" id="adminPanel">
+    <div class="container d-none" id="adminPanel">
         <div class="card mb-4 shadow-sm">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -56,10 +56,10 @@
                         <input id="newUrl" class="form-control" placeholder="网址">
                     </div>
                     <div class="col-md-2">
-                        <input id="newIcon" class="form-control" placeholder="图标（如 fa-search）">
+                        <select id="newIcon" class="form-select"></select>
                     </div>
                     <div class="col-md-2">
-                        <input id="newIconColor" class="form-control" placeholder="图标颜色">
+                        <input id="newIconColor" type="color" class="form-control" value="#007bff">
                     </div>
                     <div class="col-md-1">
                         <input id="newSort" type="number" class="form-control" placeholder="排序" value="0">
