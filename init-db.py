@@ -47,6 +47,7 @@ db.execute("INSERT OR REPLACE INTO nav_config(key,value) VALUES('admin_pwd','123
 
 db.execute('INSERT INTO nav_category(name,sort) VALUES(?,?)', ('常用工具', 1))
 db.execute('INSERT INTO nav_category(name,sort) VALUES(?,?)', ('技术站点', 2))
+db.execute('INSERT INTO nav_category(name,sort) VALUES(?,?)', ('下载相关', 3))
 
 db.execute('INSERT INTO nav_stock(code,name,sort) VALUES(?,?,?)', ('sh000001', '上证指数', 1))
 db.execute('INSERT INTO nav_stock(code,name,sort) VALUES(?,?,?)', ('sz399001', '深证成指', 2))
@@ -70,6 +71,7 @@ db.execute('INSERT INTO nav_link(category_id,title,url,icon,desc,sort) VALUES(?,
 db.execute('INSERT INTO nav_link(category_id,title,url,icon,desc,sort) VALUES(?,?,?,?,?,?)', (2, '掘金', 'https://juejin.cn', defaultIcon, '技术社区', 3))
 db.execute('INSERT INTO nav_link(category_id,title,url,icon,desc,sort) VALUES(?,?,?,?,?,?)', (2, 'V2EX', 'https://www.v2ex.com', defaultIcon, '创意工作者社区', 4))
 db.execute('INSERT INTO nav_link(category_id,title,url,icon,desc,sort) VALUES(?,?,?,?,?,?)', (2, 'CSDN', 'https://www.csdn.net', defaultIcon, '技术博客平台', 5))
+db.execute('INSERT INTO nav_link(category_id,title,url,icon,desc,sort) VALUES(?,?,?,?,?,?)', (3, 'NovaHD', 'https://pt.novahd.top/index.php', defaultIcon, 'PT下载站点', 1))
 
 db.commit()
 print('Database initialized successfully')
